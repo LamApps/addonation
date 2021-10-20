@@ -6,7 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 import { AppStyles } from '../AppStyles';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation }:any) {
   return (
     <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>

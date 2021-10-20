@@ -1,25 +1,22 @@
 import React from 'react';
-import { StyleSheet, ScrollView, SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, SafeAreaView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 
-import Carousel from '../components/Carousel/Carousel';
 import Seconds from '../components/Seconds';
 
 import { FontAwesome } from '@expo/vector-icons'; 
 
 import { AppStyles } from '../AppStyles';
 
-export default function DashboardScreen({ navigation }:any) {
+export default function DonateScreen({ navigation }:any) {
   return (
     <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
             <Seconds />
-            <View style={styles.carouselContainer}>
-                <Carousel />
-            </View>
+
             <View style={styles.donateContainer}>
                 <Text style={{color:AppStyles.color.primary, fontSize:AppStyles.fontSize.large, fontWeight: 'bold'}}>SIX SECONDS</Text>
                 <Text style={{color:AppStyles.color.text, fontSize:AppStyles.fontSize.medium, fontWeight: 'bold'}}>TO FIX THE WORLD!</Text>
-                <TouchableOpacity style={styles.donateButton} onPress={navigation.navigate('Donate')}>
+                <TouchableOpacity style={styles.donateButton}>
                     <FontAwesome name="play" size={32} color='white' />
                     <Text style={{color:'white', fontWeight: 'bold'}}>Donate your</Text>
                     <Text style={{color:'white', fontWeight: 'bold'}}>6 sec</Text>
@@ -36,13 +33,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   scrollView: {
-  },
-  carouselContainer: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingBottom: 5,
-      paddingTop: 20,
-      paddingHorizontal: 50,
   },
   donateContainer: {
     alignItems: 'center',

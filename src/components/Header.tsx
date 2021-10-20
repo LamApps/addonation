@@ -17,13 +17,14 @@ export default function Header(prop: { title: string; navigation: any; viewLogou
                 <Ionicons name="chevron-back-circle" size={28} color="white" />
             </TouchableOpacity>
             <View><Text style={styles.titleText}>{title}</Text></View>
-            <TouchableOpacity
+            {viewLogout?<TouchableOpacity
                 style={{ padding: 12 }}
                 onPress={() => {
                 navigation.navigate('Home');
                 }}>
-                {viewLogout?<Ionicons name="exit-outline" size={26} color="white" />:<></>}
+                <Ionicons name="exit-outline" size={26} color="white" />
             </TouchableOpacity>
+            :<View style={{ padding: 12 }}><Text> </Text></View>}
         </View>
     );
 }

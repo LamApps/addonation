@@ -6,7 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 import { AppStyles } from '../AppStyles';
 
-export default function ResetPwdScreen({navigation}) {
+export default function ResetPwdScreen({navigation}:any) {
   return (
     <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>

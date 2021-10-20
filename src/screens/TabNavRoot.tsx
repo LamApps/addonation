@@ -1,20 +1,20 @@
 import React from 'react';
 
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Header from '../../src/components/Header';
 import { getHeaderTitle } from '@react-navigation/elements';
 
-import DashboardScreen from '../../src/screens/DashboardScreen';
+import DashboardScreen from './DashboardScreen';
+import DonateScreen from './DonateScreen';
 
 import { FontAwesome } from '@expo/vector-icons';
 import { AppStyles } from '../AppStyles';
 const Tab = createBottomTabNavigator();
 
-export default function TabNavRoot({ navigation }) {
+export default function TabNavRoot({ navigation }:any) {
   return (
-    <Tab.Navigator initialRouteName="Home"
+    <Tab.Navigator initialRouteName="Dashboard"
       screenOptions={{
         header: ({ navigation, route, options }) => {
           const title = getHeaderTitle(options, route.name);
@@ -40,8 +40,8 @@ export default function TabNavRoot({ navigation }) {
         tabBarLabel: 'Donate',
         tabBarIcon: ({ color, size }) => (
             <FontAwesome name="heart" size={size-2} color={color} />
-        ),}} name="Donate" component={DashboardScreen} />
-      <Tab.Screen options={{ 
+        ),}} name="Donate" component={DonateScreen} />
+      {/* <Tab.Screen options={{ 
         title: 'NEWS',
         tabBarLabel: 'News',
         tabBarIcon: ({ color, size }) => (
@@ -58,7 +58,7 @@ export default function TabNavRoot({ navigation }) {
         tabBarLabel: 'Settings',
         tabBarIcon: ({ color, size }) => (
             <FontAwesome name="cog" size={size} color={color} />
-        ),}} name="Settings" component={DashboardScreen} />
+        ),}} name="Settings" component={DashboardScreen} /> */}
     </Tab.Navigator>
   );
 }
