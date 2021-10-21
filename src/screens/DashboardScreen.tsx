@@ -19,7 +19,7 @@ export default function DashboardScreen({ navigation }:any) {
             <View style={styles.donateContainer}>
                 <Text style={{color:AppStyles.color.primary, fontSize:AppStyles.fontSize.large, fontWeight: 'bold'}}>SIX SECONDS</Text>
                 <Text style={{color:AppStyles.color.text, fontSize:AppStyles.fontSize.medium, fontWeight: 'bold'}}>TO FIX THE WORLD!</Text>
-                <TouchableOpacity style={styles.donateButton} onPress={navigation.navigate('Donate')}>
+                <TouchableOpacity style={styles.donateButton} onPress={()=>{navigation.navigate('TabRoot', {screen: 'Donate'})}}>
                     <FontAwesome name="play" size={32} color='white' />
                     <Text style={{color:'white', fontWeight: 'bold'}}>Donate your</Text>
                     <Text style={{color:'white', fontWeight: 'bold'}}>6 sec</Text>

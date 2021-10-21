@@ -38,7 +38,7 @@ export default function HomeScreen({ navigation }:any) {
                 placeholder="Password"
                 underlineColorAndroid="transparent"
                 ></TextInput>
-                <Button containerStyle={styles.signInButton} onPress={() => navigation.navigate('TabRoot')} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>Sign in</Button>
+                <Button containerStyle={styles.signInButton} onPress={() => navigation.navigate('TabRoot', { screen: 'Dashboard' })} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>Sign in</Button>
                 <View
                   style={{
                     borderBottomColor: '#d1d1d1',

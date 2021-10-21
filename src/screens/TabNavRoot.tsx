@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavRoot({ navigation }:any) {
   return (
-    <Tab.Navigator initialRouteName="Dashboard"
+    <Tab.Navigator
       screenOptions={{
         header: ({ navigation, route, options }) => {
           const title = getHeaderTitle(options, route.name);
@@ -35,13 +35,13 @@ export default function TabNavRoot({ navigation }:any) {
         tabBarIcon: ({ color, size }) => (
             <FontAwesome name="home" size={size} color={color} />
         ),}} name="Dashboard" component={DashboardScreen}  />
-      <Tab.Screen options={{ 
+       <Tab.Screen options={{ 
         title: 'DONATE',
         tabBarLabel: 'Donate',
         tabBarIcon: ({ color, size }) => (
             <FontAwesome name="heart" size={size-2} color={color} />
         ),}} name="Donate" component={DonateScreen} />
-      {/* <Tab.Screen options={{ 
+      {/*<Tab.Screen options={{ 
         title: 'NEWS',
         tabBarLabel: 'News',
         tabBarIcon: ({ color, size }) => (
