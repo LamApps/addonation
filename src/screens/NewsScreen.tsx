@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, Image } from 'react-native';
+import { View, FlatList, StyleSheet, Text, Image } from 'react-native';
 import Button from "react-native-button";
 
 import { AppStyles } from '../AppStyles';
@@ -26,9 +26,10 @@ const appData = [
         imgUrl: "https://source.unsplash.com/200x300/?island"
     }
 ];
-
-const Item = ({item}) => (
-    <View style={styles.listContainer}>
+class Item extends React.PureComponent {
+    render() {
+        const { item, navigation } = this.props;
+        return <View style={styles.listContainer}>
         <View style={styles.innerContent}>
             <Image
                 source={{uri: item.imgUrl}}
@@ -37,18 +38,19 @@ const Item = ({item}) => (
             <Text style={styles.header}>{item.author}</Text>
             <Text style={styles.time}>{item.quote}</Text>
             <Text style={styles.body}>{item.description}</Text>
-            <Button containerStyle={styles.readMoreButton} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>Read More</Button>
+            <Button containerStyle={styles.readMoreButton} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}} onPress={()=>{navigation.navigate('NewsDetail', {item: item})}}>Read More</Button>
         </View>
     </View>
-);
+    }
+}
 
 export default function NewsScreen({navigation}) {
-  const renderItem = ({ item }) => <Item item={item} />;
+  const renderItem = ({ item }) => <Item item={item} navigation={navigation} />;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList data={appData} renderItem={renderItem} keyExtractor={item => item.id} />
-    </SafeAreaView>
+      <View style={styles.container}>
+        <FlatList data={appData} renderItem={renderItem} keyExtractor={item => item.id} />
+      </View>
   );
 }
 

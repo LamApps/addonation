@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from "react-native-button";
-import { StyleSheet, ScrollView, SafeAreaView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 
 import { FontAwesome } from '@expo/vector-icons'; 
 
@@ -8,67 +8,62 @@ import { AppStyles } from '../AppStyles';
 
 export default function SignUpScreen({navigation}:any) {
   return (
-    <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-            <View style={styles.topContainer}>
-                <Text style={styles.secondsWorldwide}>126234521</Text>
-                <Text style={{color:AppStyles.color.primary, fontSize:16, marginBottom: 15}}>SECONDS WORLD WIDE</Text>
-                <Text style={{color:AppStyles.color.text, fontSize:AppStyles.fontSize.medium, fontWeight: 'bold'}}>Create an Account</Text>
+    <ScrollView style={styles.scrollView}>
+        <View style={styles.topContainer}>
+            <Text style={styles.secondsWorldwide}>126234521</Text>
+            <Text style={{color:AppStyles.color.primary, fontSize:16, marginBottom: 15}}>SECONDS WORLD WIDE</Text>
+            <Text style={{color:AppStyles.color.text, fontSize:AppStyles.fontSize.medium, fontWeight: 'bold'}}>Create an Account</Text>
+        </View>
+        <View style={styles.bottomContainer}>
+            <TextInput
+              style={styles.inputStyle}
+              placeholder="Email"
+              keyboardType="email-address"
+              underlineColorAndroid="transparent"
+            ></TextInput>
+            <TextInput
+              style={styles.inputStyle}
+              placeholder="Full name"
+              keyboardType="email-address"
+              underlineColorAndroid="transparent"
+            ></TextInput>
+            <TextInput
+            style={styles.inputStyle}
+            secureTextEntry={true}
+            placeholder="Password"
+            underlineColorAndroid="transparent"
+            ></TextInput>
+            <TextInput
+            style={styles.inputStyle}
+            secureTextEntry={true}
+            placeholder="Confirm password"
+            underlineColorAndroid="transparent"
+            ></TextInput>
+            <Button containerStyle={styles.signInButton} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>CREATE AN ACCOUNT</Button>
+            <View
+              style={{
+                borderBottomColor: '#d1d1d1',
+                borderBottomWidth: 1,
+                marginTop: 25,
+              }}
+            />
+            <View style={styles.socialSignin}>
+              <TouchableOpacity style={styles.socialButton}><FontAwesome name="google" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
+              <TouchableOpacity style={styles.socialButton}><FontAwesome name="facebook" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
+              <TouchableOpacity style={styles.socialButton}><FontAwesome name="twitter" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
             </View>
-            <View style={styles.bottomContainer}>
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                  underlineColorAndroid="transparent"
-                ></TextInput>
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="Full name"
-                  keyboardType="email-address"
-                  underlineColorAndroid="transparent"
-                ></TextInput>
-                <TextInput
-                style={styles.inputStyle}
-                secureTextEntry={true}
-                placeholder="Password"
-                underlineColorAndroid="transparent"
-                ></TextInput>
-                <TextInput
-                style={styles.inputStyle}
-                secureTextEntry={true}
-                placeholder="Confirm password"
-                underlineColorAndroid="transparent"
-                ></TextInput>
-                <Button containerStyle={styles.signInButton} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>CREATE AN ACCOUNT</Button>
-                <View
-                  style={{
-                    borderBottomColor: '#d1d1d1',
-                    borderBottomWidth: 1,
-                    marginTop: 25,
-                  }}
-                />
-                <View style={styles.socialSignin}>
-                  <TouchableOpacity style={styles.socialButton}><FontAwesome name="google" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
-                  <TouchableOpacity style={styles.socialButton}><FontAwesome name="facebook" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
-                  <TouchableOpacity style={styles.socialButton}><FontAwesome name="twitter" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
-                </View>
-                <View style={styles.footer}>
-                  <TouchableOpacity onPress={() => navigation.navigate('Home')}><Text style={styles.textButtons}>Sign In</Text></TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigation.navigate('ResetPwd')}><Text style={styles.textButtons}>Forgot password?</Text></TouchableOpacity>
-                </View>
+            <View style={styles.footer}>
+              <TouchableOpacity onPress={() => navigation.navigate('Home')}><Text style={styles.textButtons}>Sign In</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('ResetPwd')}><Text style={styles.textButtons}>Forgot password?</Text></TouchableOpacity>
             </View>
-        </ScrollView>
-    </SafeAreaView>
+        </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   scrollView: {
+    backgroundColor: '#fff'
   },
   topContainer: {
     alignSelf: 'stretch',

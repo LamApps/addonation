@@ -1,40 +1,35 @@
 import React from 'react';
 import Button from "react-native-button";
-import { StyleSheet, ScrollView, SafeAreaView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 
 import { AppStyles } from '../AppStyles';
 
 export default function ResetPwdScreen({navigation}:any) {
   return (
-    <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-        <View style={styles.topContainer}>
-                <Text style={styles.secondsWorldwide}>126234521</Text>
-                <Text style={{color:AppStyles.color.primary, fontSize:16, marginBottom: 35}}>SECONDS WORLD WIDE</Text>
-                <Text style={{color:AppStyles.color.text, fontSize:AppStyles.fontSize.medium, fontWeight: 'bold'}}>Forgot Password?</Text>
-                <Text style={{color:AppStyles.color.textMute, textAlign: 'center', paddingHorizontal: 30}}>Please input your email address and click "RESET PASSWORD" button. And then you will receive a mail with new password.</Text>
-            </View>
-            <View style={styles.bottomContainer}>
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                  underlineColorAndroid="transparent"
-                ></TextInput>
-                <Button containerStyle={styles.resetButton} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>RESET PASSWORD</Button>
-                <Button containerStyle={styles.signInButton} onPress={() => navigation.navigate('Home')} style={{color:'black', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>SIGN IN</Button>
-            </View>
-        </ScrollView>
-    </SafeAreaView>
+    <ScrollView style={styles.scrollView}>
+      <View style={styles.topContainer}>
+            <Text style={styles.secondsWorldwide}>126234521</Text>
+            <Text style={{color:AppStyles.color.primary, fontSize:16, marginBottom: 35}}>SECONDS WORLD WIDE</Text>
+            <Text style={{color:AppStyles.color.text, fontSize:AppStyles.fontSize.medium, fontWeight: 'bold'}}>Forgot Password?</Text>
+            <Text style={{color:AppStyles.color.textMute, textAlign: 'center', paddingHorizontal: 30}}>Please input your email address and click "RESET PASSWORD" button. And then you will receive a mail with new password.</Text>
+        </View>
+        <View style={styles.bottomContainer}>
+            <TextInput
+              style={styles.inputStyle}
+              placeholder="Email"
+              keyboardType="email-address"
+              underlineColorAndroid="transparent"
+            ></TextInput>
+            <Button containerStyle={styles.resetButton} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>RESET PASSWORD</Button>
+            <Button containerStyle={styles.signInButton} onPress={() => navigation.navigate('Home')} style={{color:'black', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>SIGN IN</Button>
+        </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   scrollView: {
+    backgroundColor: '#fff'
   },
   topContainer: {
     alignSelf: 'stretch',

@@ -1,5 +1,5 @@
 import React, { useRef, useState} from 'react';
-import { StyleSheet, ScrollView, SafeAreaView, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
@@ -26,46 +26,41 @@ export default function DonateScreen({ navigation }:any) {
   }
   
   return (
-    <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-            <Seconds />
-            <View style={styles.textContainer}>
-              <Text style={{textAlign: 'center'}}>
-                <Text style={{color: AppStyles.color.primary}}>ADDonation.org</Text> is a not for profit organization supporting environmental nonprofit organizations around the world. We raise funds by <Text style={{color: AppStyles.color.primary}}>6 second</Text> donations from our viewers. Just watching 6 seconds commercial adverts will help out reducing commercial wastes around the world. We strongly believe in our goodwill and <Text style={{color: AppStyles.color.primary}}>100%</Text> of all our profit will be donated to create a virtuous circle to fix the world!!!
-              </Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Video
-                ref={video}
-                style={styles.video}
-                source={{
-                  uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-                }}
-                useNativeControls
-                resizeMode="contain"
-                isLooping
-                onPlaybackStatusUpdate={status => setStatus(() => status)}
-                onFullscreenUpdate={onFullscreenUpdate}
-              />
-              <View style={styles.playBtnContainer}>
-                <TouchableOpacity style={styles.playButton} onPress={() =>
-                    status.isPlaying ? video.current.pauseAsync() : video.current.playAsync()
-                  }>
-                  {status.isPlaying ? <FontAwesome name="pause" size={20} color='white' /> : <FontAwesome name="play" size={20} color='white' /> }
-                </TouchableOpacity>
-              </View>
-            </View>
-        </ScrollView>
-    </SafeAreaView>
+    <ScrollView style={styles.scrollView}>
+        <Seconds />
+        <View style={styles.textContainer}>
+          <Text style={{textAlign: 'center'}}>
+            <Text style={{color: AppStyles.color.primary}}>ADDonation.org</Text> is a not for profit organization supporting environmental nonprofit organizations around the world. We raise funds by <Text style={{color: AppStyles.color.primary}}>6 second</Text> donations from our viewers. Just watching 6 seconds commercial adverts will help out reducing commercial wastes around the world. We strongly believe in our goodwill and <Text style={{color: AppStyles.color.primary}}>100%</Text> of all our profit will be donated to create a virtuous circle to fix the world!!!
+          </Text>
+        </View>
+        <View style={{flex: 1}}>
+          <Video
+            ref={video}
+            style={styles.video}
+            source={{
+              uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+            }}
+            useNativeControls
+            resizeMode="contain"
+            isLooping
+            onPlaybackStatusUpdate={status => setStatus(() => status)}
+            onFullscreenUpdate={onFullscreenUpdate}
+          />
+          <View style={styles.playBtnContainer}>
+            <TouchableOpacity style={styles.playButton} onPress={() =>
+                status.isPlaying ? video.current.pauseAsync() : video.current.playAsync()
+              }>
+              {status.isPlaying ? <FontAwesome name="pause" size={20} color='white' /> : <FontAwesome name="play" size={20} color='white' /> }
+            </TouchableOpacity>
+          </View>
+        </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   scrollView: {
+    backgroundColor: '#fff'
   },
   textContainer: {
     padding: 15,

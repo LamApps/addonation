@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Button from "react-native-button";
-import { StyleSheet, ScrollView, SafeAreaView, Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import {useAuth} from '../contexts/Auth';
 
 import { FontAwesome } from '@expo/vector-icons'; 
@@ -16,69 +16,64 @@ export default function HomeScreen({ navigation }:any) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-            <View style={styles.topContainer}>
-                <Text style={styles.secondsWorldwide}>126234521</Text>
-                <Text style={{color:'white', fontSize:16, marginBottom: 5}}>SECONDS WORLD WIDE</Text>
-                <Image source={require('../../assets/img/white-pig.png')} style={styles.logo}></Image>
-                <Text style={{color:'white', fontSize:AppStyles.fontSize.large, fontWeight: 'bold'}}>SIX SECONDS</Text>
-            </View>
-            <View>
-                <Image source={require('../../assets/img/first_back.png')} style={styles.imageContent}>
-                </Image>
-                <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'space-between', alignItems: 'center'}}>
-                    <Text style={{color:'white', fontSize:AppStyles.fontSize.medium}}>TO FIX THE WORLD!</Text>
-                    <Text style={{color:'black', fontSize:AppStyles.fontSize.medium}}>Login to your account</Text>
-                </View>
-            </View>
-            
-            <View style={styles.bottomContainer}>
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                  underlineColorAndroid="transparent"
-                ></TextInput>
-                <TextInput
+      <ScrollView style={styles.scrollView}>
+          <View style={styles.topContainer}>
+              <Text style={styles.secondsWorldwide}>126234521</Text>
+              <Text style={{color:'white', fontSize:16, marginBottom: 5}}>SECONDS WORLD WIDE</Text>
+              <Image source={require('../../assets/img/white-pig.png')} style={styles.logo}></Image>
+              <Text style={{color:'white', fontSize:AppStyles.fontSize.large, fontWeight: 'bold'}}>SIX SECONDS</Text>
+          </View>
+          <View>
+              <Image source={require('../../assets/img/first_back.png')} style={styles.imageContent}>
+              </Image>
+              <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'space-between', alignItems: 'center'}}>
+                  <Text style={{color:'white', fontSize:AppStyles.fontSize.medium}}>TO FIX THE WORLD!</Text>
+                  <Text style={{color:'black', fontSize:AppStyles.fontSize.medium}}>Login to your account</Text>
+              </View>
+          </View>
+          
+          <View style={styles.bottomContainer}>
+              <TextInput
                 style={styles.inputStyle}
-                secureTextEntry={true}
-                placeholder="Password"
+                placeholder="Email"
+                keyboardType="email-address"
                 underlineColorAndroid="transparent"
-                ></TextInput>
-                {loading ? (
-                  <ActivityIndicator color={'#000'} animating={true} size="small" />
-                ) : (
-                  <Button containerStyle={styles.signInButton} onPress={signIn} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>Sign in</Button>
-                )}
-                <View
-                  style={{
-                    borderBottomColor: '#d1d1d1',
-                    borderBottomWidth: 1,
-                    marginTop: 25,
-                  }}
-                />
-                <View style={styles.socialSignin}>
-                  <TouchableOpacity style={styles.socialButton}><FontAwesome name="google" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
-                  <TouchableOpacity style={styles.socialButton}><FontAwesome name="facebook" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
-                  <TouchableOpacity style={styles.socialButton}><FontAwesome name="twitter" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
-                </View>
-                <View style={styles.footer}>
-                  <TouchableOpacity onPress={() => navigation.navigate('SignUp')}><Text style={styles.textButtons}>Sign Up</Text></TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigation.navigate('ResetPwd')}><Text style={styles.textButtons}>Forgot password?</Text></TouchableOpacity>
-                </View>
-            </View>
-        </ScrollView>
-    </SafeAreaView>
+              ></TextInput>
+              <TextInput
+              style={styles.inputStyle}
+              secureTextEntry={true}
+              placeholder="Password"
+              underlineColorAndroid="transparent"
+              ></TextInput>
+              {loading ? (
+                <ActivityIndicator color={'#000'} animating={true} size="small" />
+              ) : (
+                <Button containerStyle={styles.signInButton} onPress={signIn} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>Sign in</Button>
+              )}
+              <View
+                style={{
+                  borderBottomColor: '#d1d1d1',
+                  borderBottomWidth: 1,
+                  marginTop: 25,
+                }}
+              />
+              <View style={styles.socialSignin}>
+                <TouchableOpacity style={styles.socialButton}><FontAwesome name="google" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
+                <TouchableOpacity style={styles.socialButton}><FontAwesome name="facebook" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
+                <TouchableOpacity style={styles.socialButton}><FontAwesome name="twitter" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
+              </View>
+              <View style={styles.footer}>
+                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}><Text style={styles.textButtons}>Sign Up</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('ResetPwd')}><Text style={styles.textButtons}>Forgot password?</Text></TouchableOpacity>
+              </View>
+          </View>
+      </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   scrollView: {
+    backgroundColor: '#fff'
   },
   topContainer: {
     alignSelf: 'stretch',
