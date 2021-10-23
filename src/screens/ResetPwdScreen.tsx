@@ -2,8 +2,6 @@ import React from 'react';
 import Button from "react-native-button";
 import { StyleSheet, ScrollView, SafeAreaView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 
-import { FontAwesome } from '@expo/vector-icons'; 
-
 import { AppStyles } from '../AppStyles';
 
 export default function ResetPwdScreen({navigation}:any) {

@@ -1,12 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Button from "react-native-button";
-import { StyleSheet, ScrollView, SafeAreaView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, SafeAreaView, Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {useAuth} from '../contexts/Auth';
 
 import { FontAwesome } from '@expo/vector-icons'; 
 
 import { AppStyles } from '../AppStyles';
 
 export default function HomeScreen({ navigation }:any) {
+  const [loading, isLoading] = useState(false);
+  const auth = useAuth();
+  const signIn = async () => {
+    isLoading(true);
+    await auth.signIn();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
@@ -38,7 +46,11 @@ export default function HomeScreen({ navigation }:any) {
                 placeholder="Password"
                 underlineColorAndroid="transparent"
                 ></TextInput>
-                <Button containerStyle={styles.signInButton} onPress={() => navigation.navigate('TabRoot', { screen: 'Dashboard' })} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>Sign in</Button>
+                {loading ? (
+                  <ActivityIndicator color={'#000'} animating={true} size="small" />
+                ) : (
+                  <Button containerStyle={styles.signInButton} onPress={signIn} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>Sign in</Button>
+                )}
                 <View
                   style={{
                     borderBottomColor: '#d1d1d1',

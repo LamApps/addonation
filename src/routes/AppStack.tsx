@@ -1,20 +1,20 @@
 import React from 'react';
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Header from '../../src/components/Header';
 import { getHeaderTitle } from '@react-navigation/elements';
-
-import DashboardScreen from './DashboardScreen';
-import DonateScreen from './DonateScreen';
-import NewsScreen from './NewsScreen';
-import NewsDetailScreen from './NewsDetailScreen';
-
 import { FontAwesome } from '@expo/vector-icons';
+
 import { AppStyles } from '../AppStyles';
+
+import DashboardScreen from '../screens/DashboardScreen';
+import DonateScreen from '../screens/DonateScreen';
+import NewsScreen from '../screens/NewsScreen';
+import NewsDetailScreen from '../screens/NewsDetailScreen';
+
 const Tab = createBottomTabNavigator();
 
-export default function TabNavRoot({ navigation }:any) {
+export const AppStack = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -48,7 +48,7 @@ export default function TabNavRoot({ navigation }:any) {
         tabBarLabel: 'News',
         tabBarIcon: ({ color, size }) => (
             <FontAwesome name="newspaper-o" size={size-3} color={color} />
-        ), }} name="News" component={NewsDetailScreen} />
+        ), }} name="News" component={NewsScreen} />
       {/*<Tab.Screen options={{ 
         title: 'THANK YOU EVENT',
         tabBarLabel: 'Gift',
@@ -63,4 +63,4 @@ export default function TabNavRoot({ navigation }:any) {
         ),}} name="Settings" component={DashboardScreen} /> */}
     </Tab.Navigator>
   );
-}
+};
