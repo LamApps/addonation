@@ -17,10 +17,14 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.addonation.donatesixsec",
+      "buildNumber": "1.0.0",
       "supportsTablet": true,
       "requireFullScreen": true
     },
     "android": {
+      "package": "com.addonation.donatesixsec",
+      "versionCode": 100,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

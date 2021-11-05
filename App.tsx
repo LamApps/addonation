@@ -10,9 +10,9 @@ const App = () => {
       <SafeAreaView style={styles.container}>
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
           <Router />
-          <StatusBar style="dark" />
         </KeyboardAvoidingView>
       </SafeAreaView>
+      <StatusBar style="light" />
     </AuthProvider>
   );
 };
