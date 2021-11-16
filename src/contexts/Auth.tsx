@@ -5,8 +5,9 @@ import {AuthData, authService} from '../services/authService';
 type AuthContextData = {
   authData?: AuthData;
   loading: boolean;
-  signIn(): Promise<void>;
-  signOut(): void;
+  signIn(email:string, password:string): Promise<void>;
+  signUp(email:string, password:string, name:string): Promise<void>;
+  signOut(): Promise<void>;
 };
 
 //Create the Auth Context with the data type specified
@@ -42,14 +43,16 @@ const AuthProvider: React.FC = ({children}) => {
     }
   }
 
-  const signIn = async () => {
+  const signIn = async (email:string, password:string) => {
     //call the service passing credential (email and password).
     //In a real App this data will be provided by the user from some InputText components.
+
     const _authData = await authService.signIn(
-      'lucasgarcez@email.com',
-      '123456',
+      email,
+      password,
     );
 
+    
     //Set the data in the context, so the App can be notified
     //and send the user to the AuthStack
     setAuthData(_authData);
@@ -59,9 +62,23 @@ const AuthProvider: React.FC = ({children}) => {
     AsyncStorage.setItem('@AuthData', JSON.stringify(_authData));
   };
 
+  const signUp = async (email:string, password:string, name:string) => {
+    //call the service passing credential (email and password).
+    //In a real App this data will be provided by the user from some InputText components.
+    
+    await authService.signUp(
+      email,
+      password,
+      name,
+    );
+
+  };
+
   const signOut = async () => {
     //Remove data from context, so the App can be notified
     //and send the user to the AuthStack
+    await authService.signOut();
+
     setAuthData(undefined);
 
     //Remove the data from Async Storage
@@ -72,7 +89,7 @@ const AuthProvider: React.FC = ({children}) => {
   return (
     //This component will be used to encapsulate the whole App,
     //so all components will have access to the Context
-    <AuthContext.Provider value={{authData, loading, signIn, signOut}}>
+    <AuthContext.Provider value={{authData, loading, signIn, signUp, signOut}}>
       {children}
     </AuthContext.Provider>
   );

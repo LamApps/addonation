@@ -1,24 +1,59 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Button from "react-native-button";
-import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import {useAuth} from '../contexts/Auth';
+import Firebase from "../config/firebase";
 
-import { FontAwesome } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { AppStyles } from '../AppStyles';
 
-export default function HomeScreen({ navigation }:any) {
-  const [loading, isLoading] = useState(false);
-  const auth = useAuth();
-  const signIn = async () => {
-    isLoading(true);
-    await auth.signIn();
-  };
+import InputPasswordToggle from '../components/InputPasswordToggle';
 
+export default function HomeScreen({ navigation }:any) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, isLoading] = useState(false);
+  const [totalSeconds, setTotalSeconds] = useState(0);
+
+  const auth = useAuth();
+
+  useEffect(() => {
+    var ref = Firebase.database().ref('totalSeconds')
+    ref.on('value', (snapshot: { val: () => any; }) => {
+      const data = snapshot.val()
+      setTotalSeconds(data || 0)
+    })
+    return function cleanup() {
+      ref.off()
+    }
+  }, [])
+
+  const signIn = async () => {
+    try {
+      if (email !== '' && password !== '') {
+        isLoading(true);
+        await auth.signIn(email, password);
+      }else{
+        Alert.alert('Alert', 'Enter your credential info!', [
+          { text: 'OK' },
+        ]);
+      }
+    } catch (error) {
+      console.log(error.message);
+      isLoading(false);
+      Alert.alert('Error', error.message, [
+        { text: 'OK', onPress: () => {
+          setEmail('');
+          setPassword('');
+        }},
+      ]);
+    }
+  };
   return (
       <ScrollView style={styles.scrollView}>
           <View style={styles.topContainer}>
-              <Text style={styles.secondsWorldwide}>126234521</Text>
+              <Text style={styles.secondsWorldwide}>{totalSeconds}</Text>
               <Text style={{color:'white', fontSize:16, marginBottom: 5}}>SECONDS WORLD WIDE</Text>
               <Image source={require('../../assets/img/white-pig.png')} style={styles.logo}></Image>
               <Text style={{color:'white', fontSize:AppStyles.fontSize.large, fontWeight: 'bold'}}>SIX SECONDS</Text>
@@ -38,13 +73,16 @@ export default function HomeScreen({ navigation }:any) {
                 placeholder="Email"
                 keyboardType="email-address"
                 underlineColorAndroid="transparent"
+                value={email}
+                onChangeText={text => setEmail(text)}
               ></TextInput>
-              <TextInput
-              style={styles.inputStyle}
-              secureTextEntry={true}
-              placeholder="Password"
-              underlineColorAndroid="transparent"
-              ></TextInput>
+              <InputPasswordToggle 
+                placeholder="Password"
+                style={styles.inputStyle}
+                iconColor='#777'
+                iconSize={18}
+                value={password}
+                onChangeText={setPassword}/>
               {loading ? (
                 <ActivityIndicator color={'#000'} animating={true} size="small" />
               ) : (
@@ -58,9 +96,9 @@ export default function HomeScreen({ navigation }:any) {
                 }}
               />
               <View style={styles.socialSignin}>
-                <TouchableOpacity style={styles.socialButton}><FontAwesome name="google" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
-                <TouchableOpacity style={styles.socialButton}><FontAwesome name="facebook" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
-                <TouchableOpacity style={styles.socialButton}><FontAwesome name="twitter" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
+                <TouchableOpacity style={styles.socialButton}><MaterialCommunityIcons name="google" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
+                <TouchableOpacity style={styles.socialButton}><MaterialCommunityIcons name="facebook" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
+                <TouchableOpacity style={styles.socialButton}><MaterialCommunityIcons name="twitter" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
               </View>
               <View style={styles.footer}>
                 <TouchableOpacity onPress={() => navigation.navigate('SignUp')}><Text style={styles.textButtons}>Sign Up</Text></TouchableOpacity>
@@ -112,6 +150,7 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingLeft: 15,
     marginBottom: 15,
+    width: '100%',
   },
   signInButton: { 
     padding: 15, 
@@ -146,5 +185,5 @@ const styles = StyleSheet.create({
   textButtons: {
     color:AppStyles.color.primary, 
     fontWeight: 'bold'
-  }
+  },
 });

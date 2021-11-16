@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import Firebase from "../config/firebase";
+import {useAuth} from '../contexts/Auth';
 
 import Carousel from '../components/Carousel/Carousel';
 import Seconds from '../components/Seconds';
@@ -9,9 +11,36 @@ import { FontAwesome } from '@expo/vector-icons';
 import { AppStyles } from '../AppStyles';
 
 export default function DashboardScreen({ navigation }:any) {
+  const [totalSeconds, setTotalSeconds] = useState(0);
+  const [mySeconds, setMySeconds] = useState(0);
+  const auth = useAuth();
+
+  useEffect(() => {
+    var uid = auth.authData.token;
+    const mySecRef = Firebase.database().ref('seconds/'+uid);
+    mySecRef.on('value', (snapshot: { val: () => any; }) => {
+      const data = snapshot.val();
+      setMySeconds(data || 0);
+    })
+    return function cleanup() {
+      mySecRef.off()
+    }
+  }, [])
+
+  useEffect(() => {
+    var ref = Firebase.database().ref('totalSeconds')
+    ref.on('value', (snapshot: { val: () => any; }) => {
+      const data = snapshot.val()
+      setTotalSeconds(data || 0)
+    })
+    return function cleanup() {
+      ref.off()
+    }
+  }, [])
+
   return (
     <ScrollView style={styles.scrollView}>
-        <Seconds />
+        <Seconds totalSeconds={totalSeconds} mySeconds={mySeconds} />
         <View style={styles.carouselContainer}>
             <Carousel />
         </View>

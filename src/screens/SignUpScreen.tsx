@@ -1,16 +1,64 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Button from "react-native-button";
-import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import {useAuth} from '../contexts/Auth';
+import Firebase from "../config/firebase";
 
 import { FontAwesome } from '@expo/vector-icons'; 
 
 import { AppStyles } from '../AppStyles';
+import InputPasswordToggle from '../components/InputPasswordToggle';
 
 export default function SignUpScreen({navigation}:any) {
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, isLoading] = useState(false);
+  const [totalSeconds, setTotalSeconds] = useState(0);
+
+  const auth = useAuth();
+
+  useEffect(() => {
+    var ref = Firebase.database().ref('totalSeconds')
+    ref.on('value', (snapshot: { val: () => any; }) => {
+      const data = snapshot.val()
+      setTotalSeconds(data || 0)
+    })
+    return function cleanup() {
+      ref.off()
+    }
+  }, [])
+  
+  const signUp = async () => {
+    try {
+      if (email !== '' && password !== '' && name !== '') {
+        isLoading(true);
+        await auth.signUp(email, password, name);
+        Alert.alert('Congratulations!', 'Registered successfully!', [
+          { text: 'OK', onPress: () => {
+            navigation.navigate('Home')
+          }},
+        ]);
+      }else{
+        Alert.alert('Alert', 'Enter details to signup!', [
+          { text: 'OK' },
+        ]);
+      }
+    } catch (error) {
+      isLoading(false);
+      Alert.alert('Error', 'An error occured!', [
+        { text: 'OK', onPress: () => {
+          setEmail('');
+          setPassword('');
+          setName('');
+        }},
+      ]);
+    }
+  };
   return (
     <ScrollView style={styles.scrollView}>
         <View style={styles.topContainer}>
-            <Text style={styles.secondsWorldwide}>126234521</Text>
+            <Text style={styles.secondsWorldwide}>{totalSeconds}</Text>
             <Text style={{color:AppStyles.color.primary, fontSize:16, marginBottom: 15}}>SECONDS WORLD WIDE</Text>
             <Text style={{color:AppStyles.color.text, fontSize:AppStyles.fontSize.medium, fontWeight: 'bold'}}>Create an Account</Text>
         </View>
@@ -20,26 +68,29 @@ export default function SignUpScreen({navigation}:any) {
               placeholder="Email"
               keyboardType="email-address"
               underlineColorAndroid="transparent"
-            ></TextInput>
+              value={email}
+              onChangeText={text => setEmail(text)}
+          ></TextInput>
             <TextInput
               style={styles.inputStyle}
               placeholder="Full name"
               keyboardType="email-address"
               underlineColorAndroid="transparent"
-            ></TextInput>
-            <TextInput
-            style={styles.inputStyle}
-            secureTextEntry={true}
-            placeholder="Password"
-            underlineColorAndroid="transparent"
-            ></TextInput>
-            <TextInput
-            style={styles.inputStyle}
-            secureTextEntry={true}
-            placeholder="Confirm password"
-            underlineColorAndroid="transparent"
-            ></TextInput>
-            <Button containerStyle={styles.signInButton} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>CREATE AN ACCOUNT</Button>
+              value={name}
+              onChangeText={text => setName(text)}
+          ></TextInput>
+            <InputPasswordToggle 
+              placeholder="Password"
+              style={styles.inputStyle}
+              iconColor='#777'
+              iconSize={18}
+              value={password}
+              onChangeText={setPassword}/>
+            {loading ? (
+                <ActivityIndicator color={'#000'} animating={true} size="small" />
+              ) : (
+                <Button containerStyle={styles.signInButton} onPress={signUp} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>CREATE AN ACCOUNT</Button>
+              )}
             <View
               style={{
                 borderBottomColor: '#d1d1d1',
