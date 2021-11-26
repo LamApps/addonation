@@ -10,13 +10,10 @@ export default function ResetPwdScreen({navigation}:any) {
 
   useEffect(() => {
     var ref = Firebase.database().ref('totalSeconds')
-    ref.on('value', (snapshot: { val: () => any; }) => {
+    ref.once('value', (snapshot: { val: () => any; }) => {
       const data = snapshot.val()
       setTotalSeconds(data || 0)
     })
-    return function cleanup() {
-      ref.off()
-    }
   }, [])
   
   return (

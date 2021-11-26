@@ -16,26 +16,20 @@ export default function DashboardScreen({ navigation }:any) {
   const auth = useAuth();
 
   useEffect(() => {
-    var uid = auth.authData.token;
+    var uid = auth.authData?.token;
     const mySecRef = Firebase.database().ref('seconds/'+uid);
-    mySecRef.on('value', (snapshot: { val: () => any; }) => {
+    mySecRef.once('value', (snapshot: { val: () => any; }) => {
       const data = snapshot.val();
       setMySeconds(data || 0);
     })
-    return function cleanup() {
-      mySecRef.off()
-    }
   }, [])
 
   useEffect(() => {
     var ref = Firebase.database().ref('totalSeconds')
-    ref.on('value', (snapshot: { val: () => any; }) => {
+    ref.once('value', (snapshot: { val: () => any; }) => {
       const data = snapshot.val()
       setTotalSeconds(data || 0)
     })
-    return function cleanup() {
-      ref.off()
-    }
   }, [])
 
   return (

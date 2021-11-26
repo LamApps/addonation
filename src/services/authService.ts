@@ -51,7 +51,7 @@ export type AuthData = {
       .catch((error: { code: any; message: any; }) => {
         reject(error)
       });
-    });
+    })
   };
   const signOut = (): Promise<void> => {
     // this is a mock of an API call, in a real app

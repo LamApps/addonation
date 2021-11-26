@@ -31,7 +31,10 @@ export default {
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#FFFFFF"
-      }
+      },
+      permissions: [
+        "RECEIVE_BOOT_COMPLETED"
+      ],
     },
     web: {
       favicon: "./assets/favicon.png"
@@ -44,6 +47,16 @@ export default {
       storageBucket: process.env.STORAGE_BUCKET,
       messagingSenderId: process.env.MESSAGING_SENDER_ID,
       appId: process.env.APP_ID
-    }
+    },
+    plugins: [
+      [
+        "expo-notifications",
+        {
+          icon: "./assets/adaptive-icon.png",
+          color: "#ffffff",
+          mode: "production"
+        }
+      ]
+    ]
   }
 }

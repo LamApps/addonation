@@ -20,13 +20,10 @@ export default function HomeScreen({ navigation }:any) {
 
   useEffect(() => {
     var ref = Firebase.database().ref('totalSeconds')
-    ref.on('value', (snapshot: { val: () => any; }) => {
+    ref.once('value', (snapshot: { val: () => any; }) => {
       const data = snapshot.val()
       setTotalSeconds(data || 0)
     })
-    return function cleanup() {
-      ref.off()
-    }
   }, [])
 
   const signIn = async () => {
@@ -43,10 +40,7 @@ export default function HomeScreen({ navigation }:any) {
       console.log(error.message);
       isLoading(false);
       Alert.alert('Error', error.message, [
-        { text: 'OK', onPress: () => {
-          setEmail('');
-          setPassword('');
-        }},
+        { text: 'OK' },
       ]);
     }
   };
@@ -82,7 +76,7 @@ export default function HomeScreen({ navigation }:any) {
                 iconColor='#777'
                 iconSize={18}
                 value={password}
-                onChangeText={setPassword}/>
+                onChangeText={setPassword} inputStyle={undefined} icon={undefined}/>
               {loading ? (
                 <ActivityIndicator color={'#000'} animating={true} size="small" />
               ) : (

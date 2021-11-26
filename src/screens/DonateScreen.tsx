@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect} from 'react';
 import { StyleSheet, ScrollView, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Video, AVPlaybackStatus, VideoFullscreenUpdateEvent } from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 import Firebase from "../config/firebase";
 import {useAuth} from '../contexts/Auth';
 
@@ -12,33 +12,28 @@ import { FontAwesome } from '@expo/vector-icons';
 
 import { AppStyles } from '../AppStyles';
 
-const VIDEO_WIDTH = Dimensions.get('window').width
+// const VIDEO_WIDTH = Dimensions.get('window').width
 export default function DonateScreen({ navigation }:any) {
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [mySeconds, setMySeconds] = useState(0);
 
   const auth = useAuth();
+  
   useEffect(() => {
     var uid = auth.authData.token;
     const mySecRef = Firebase.database().ref('seconds/'+uid);
-    mySecRef.on('value', (snapshot: { val: () => any; }) => {
+    mySecRef.once('value', (snapshot: { val: () => any; }) => {
       const data = snapshot.val();
       setMySeconds(data || 0);
     })
-    return function cleanup() {
-      mySecRef.off();
-    };
   }, [])
 
   useEffect(() => {
     const ref = Firebase.database().ref('totalSeconds');
-    ref.on('value', (snapshot: { val: () => any; }) => {
+    ref.once('value', (snapshot: { val: () => any; }) => {
       const data = snapshot.val();
       setTotalSeconds(data || 0);
     })
-    return function cleanup() {
-      ref.off();
-    };
   }, [])
 
   const video = useRef(null);
@@ -61,14 +56,16 @@ export default function DonateScreen({ navigation }:any) {
       const duration =  Math.floor(playbackStatus.durationMillis / 1000)
       totalRef.transaction((totalSec) => {
         totalSec += duration
+        setTotalSeconds(totalSec)
         return totalSec;
       });
       var uid = auth.authData.token;
       const mySecRef = Firebase.database().ref('seconds/'+uid);
       mySecRef.set(mySeconds + duration)
-
+      setMySeconds(mySeconds + duration)
     }
   };
+
   return (
     <ScrollView style={styles.scrollView}>
         <Seconds totalSeconds={totalSeconds} mySeconds={mySeconds} />

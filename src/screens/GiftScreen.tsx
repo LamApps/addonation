@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect}  from 'react';
 import { StyleSheet, ScrollView, Text, View, TouchableOpacity, Image } from 'react-native';
+import Firebase from "../config/firebase";
+import {useAuth} from '../contexts/Auth';
 
 import Seconds from '../components/Seconds';
 
@@ -8,10 +10,30 @@ import { FontAwesome5  } from '@expo/vector-icons';
 import { AppStyles } from '../AppStyles';
 
 export default function GiftScreen({ navigation }:any) {
+  const [totalSeconds, setTotalSeconds] = useState(0);
+  const [mySeconds, setMySeconds] = useState(0);
+  const auth = useAuth();
+  
+  useEffect(() => {
+    var uid = auth.authData.token;
+    const mySecRef = Firebase.database().ref('seconds/'+uid);
+    mySecRef.once('value', (snapshot: { val: () => any; }) => {
+      const data = snapshot.val();
+      setMySeconds(data || 0);
+    })
+  }, [])
+
+  useEffect(() => {
+    const ref = Firebase.database().ref('totalSeconds');
+    ref.once('value', (snapshot: { val: () => any; }) => {
+      const data = snapshot.val();
+      setTotalSeconds(data || 0);
+    })
+  }, [])
 
   return (
     <ScrollView style={styles.scrollView}>
-        <Seconds />
+        <Seconds totalSeconds={totalSeconds} mySeconds={mySeconds} />
         <Image source={require('../../assets/img/gift.png')} style={styles.gift}></Image>
         <View style={styles.textContainer}>
             <Text style={{textAlign: 'center'}}>
