@@ -4,8 +4,8 @@ import { Video, AVPlaybackStatus, VideoFullscreenUpdateEvent } from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import Firebase from "../config/firebase";
+import firebase from 'firebase'
 import {useAuth} from '../contexts/Auth';
-
 import Seconds from '../components/Seconds';
 
 import { FontAwesome } from '@expo/vector-icons'; 
@@ -27,7 +27,7 @@ export default function DonateScreen({ navigation }:any) {
     const mySecRef = Firebase.database().ref('seconds/'+uid);
     mySecRef.once('value', (snapshot: { val: () => any; }) => {
       const data = snapshot.val();
-      setMySeconds(data || 0);
+      setMySeconds(data.total || 0);
     })
   }, [])
 
@@ -54,7 +54,6 @@ export default function DonateScreen({ navigation }:any) {
   }
 
   const playVideo = () => {
-    console.log(status)
     if(status.isPlaying){
       video.current.pauseAsync()
     }else{
@@ -81,7 +80,29 @@ export default function DonateScreen({ navigation }:any) {
       });
       var uid = auth.authData.token;
       const mySecRef = Firebase.database().ref('seconds/'+uid);
-      mySecRef.set(mySeconds + duration)
+      mySecRef.update({total: mySeconds + duration})
+      mySecRef.child('logs').push({timestamp: firebase.database.ServerValue.TIMESTAMP, duration: duration, videoURL: currentUri})
+      .then(async res => {
+        const snapshot = await res.once('value')
+        const timestamp = snapshot.val().timestamp
+        const date = new Date(timestamp)
+        const year = date.getFullYear()
+        const month = date.getMonth() + 1
+        const monthSnapshot = await mySecRef.child('monthly').once('value')
+        if(monthSnapshot.numChildren()>0){
+          let matchCount = 0;
+          monthSnapshot.forEach(child => {
+            const val = child.val()
+            if(val.year === year && val.month === month) {
+              child.ref.update({duration: val.duration+duration})
+              matchCount++
+            }
+          })
+          if(matchCount == 0) monthSnapshot.ref.push({year: year, month: month, duration: duration})
+        }else{
+          monthSnapshot.ref.push({year: year, month: month, duration: duration})
+        }
+      })
       setMySeconds(mySeconds + duration)
     }
   };

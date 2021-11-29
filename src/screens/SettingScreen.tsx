@@ -31,12 +31,24 @@ export default function SettingScreen({ navigation }:any) {
         shouldSetBadge: false,
       }),
     })
-    // var uid = auth.authData?.token;
-    // const mySecRef = firebase.database().ref('seconds/'+uid)
-    // mySecRef.once('value', (snapshot: { val: () => any; }) => {
-    //   const data = snapshot.val()
-    //   setCurrentGoal(data || 0)
-    // })
+    const unsubscribe = navigation.addListener('focus', () => {
+      var uid = auth.authData?.token;
+      const mySecRef = firebase.database().ref('seconds/'+uid+'/monthly')
+      mySecRef.once('value', (snapshot) => {
+        let yearSum = 0
+        let monthSum = 0
+        const thisYear = new Date().getFullYear()
+        const thisMonth = new Date().getMonth()+1
+        snapshot.forEach(child=>{
+          const data = child.val()
+          if(data.year === thisYear) yearSum+=data.value
+          if(data.year === thisYear && data.month === thisMonth) monthSum+=data.value
+        })
+        setMyMonthlySeconds(monthSum)
+        setMyAnnuallySeconds(yearSum)
+      })
+    })
+    return unsubscribe
   }, [])
 
   const [date, setDate] = useState(new Date())
@@ -56,8 +68,8 @@ export default function SettingScreen({ navigation }:any) {
     {label: 'Thrice a day', value: 3},
   ])
 
-  const [goal, setGoal] = useState('')
-  const [currentGoal, setCurrentGoal] = useState(0)
+  const [myMonthlySeconds, setMyMonthlySeconds] = useState(0)
+  const [myAnnuallySeconds, setMyAnnuallySeconds] = useState(0)
 
 
   const onChange = async (event: any, selectedDate: any) => {
@@ -216,11 +228,11 @@ export default function SettingScreen({ navigation }:any) {
             <Text style={styles.titleText}>My total seconds</Text>
             <View style={styles.topContainer}>
               <View style={styles.secondContainer}>
-                  <Text style={styles.secondsWorldwide}>2312</Text>
+                  <Text style={styles.secondsWorldwide}>{myMonthlySeconds}</Text>
                   <Text style={{color:AppStyles.color.primary, fontSize:16, marginBottom: 5}}>Monthly</Text>
               </View>
               <View style={styles.secondContainer}>
-                  <Text style={styles.secondsWorldwide}>12321</Text>
+                  <Text style={styles.secondsWorldwide}>{myAnnuallySeconds}</Text>
                   <Text style={{color:AppStyles.color.primary, fontSize:16, marginBottom: 5}}>Annually</Text>
               </View>
             </View>

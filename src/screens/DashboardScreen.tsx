@@ -21,7 +21,7 @@ export default function DashboardScreen({ navigation }:any) {
       const mySecRef = Firebase.database().ref('seconds/'+uid)
       mySecRef.once('value', (snapshot: { val: () => any; }) => {
         const data = snapshot.val()
-        setMySeconds(data || 0)
+        setMySeconds(data.total || 0)
       })
       var ref = Firebase.database().ref('totalSeconds')
       ref.once('value', (snapshot: { val: () => any; }) => {

@@ -1,6 +1,7 @@
 import Firebase from '../config/firebase';
 const auth = Firebase.auth();
 const database = Firebase.database();
+import firebase from 'firebase';
 
 export type AuthData = {
     token: string;
@@ -43,7 +44,7 @@ export type AuthData = {
         user.updateProfile({
           displayName: name
         })
-        database.ref('seconds/'+user.uid).set(0);
+        database.ref('seconds/'+user.uid).set({total: 0, logs: {}, monthly: {}});
         // var token = await user.getIdToken();
         resolve()
         // ...

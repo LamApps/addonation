@@ -6,7 +6,7 @@ export const SLIDER_WIDTH = Dimensions.get('window').width + 80
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
 const CarouselItem = ({ item, index }:any) => (
-    <View style={styles.container} key={index}>
+    <View style={styles.itemContainer} key={index}>
         <View style={styles.innerContent}>
             <Image
                 source={{uri: item.imgUrl}}
@@ -19,7 +19,7 @@ const CarouselItem = ({ item, index }:any) => (
 )
 
 const styles = StyleSheet.create({
-    container: {
+    itemContainer: {
         paddingBottom: 10,
     },
     innerContent: {
