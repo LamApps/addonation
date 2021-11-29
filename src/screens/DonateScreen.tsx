@@ -12,13 +12,16 @@ import { FontAwesome } from '@expo/vector-icons';
 
 import { AppStyles } from '../AppStyles';
 
+const dummy_videos = [
+  'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+  'http://res.cloudinary.com/dxkxvfo2o/video/upload/v1608169738/video1_cvrjfm.mp4',
+]
 // const VIDEO_WIDTH = Dimensions.get('window').width
 export default function DonateScreen({ navigation }:any) {
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [mySeconds, setMySeconds] = useState(0);
-
+  const [currentUri, setCurrentUri] = useState(dummy_videos[Math.floor(Math.random() * 2)])
   const auth = useAuth();
-  
   useEffect(() => {
     var uid = auth.authData.token;
     const mySecRef = Firebase.database().ref('seconds/'+uid);
@@ -49,9 +52,26 @@ export default function DonateScreen({ navigation }:any) {
             break;
     }
   }
+
+  const playVideo = () => {
+    console.log(status)
+    if(status.isPlaying){
+      video.current.pauseAsync()
+    }else{
+      video.current.presentFullscreenPlayer()
+      if(status.durationMillis == status.positionMillis) video.current.playFromPositionAsync(0)
+      else video.current.playAsync()
+    }
+  }
+  const shuffleVideo = () => {
+    setCurrentUri(dummy_videos[Math.floor(Math.random() * 2)])
+    video.current.presentFullscreenPlayer()
+    video.current.playFromPositionAsync(0)
+  }
   const _onPlaybackStatusUpdate = playbackStatus => {
     setStatus(()=>playbackStatus)
     if (playbackStatus.didJustFinish){
+      video.current.dismissFullscreenPlayer()
       const totalRef = Firebase.database().ref('totalSeconds')
       const duration =  Math.floor(playbackStatus.durationMillis / 1000)
       totalRef.transaction((totalSec) => {
@@ -78,19 +98,21 @@ export default function DonateScreen({ navigation }:any) {
           <Video
             ref={video}
             style={styles.video}
-            useNativeControls
             source={{
-              uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+              uri: currentUri,
             }}
+            useNativeControls
             resizeMode="contain"
             onPlaybackStatusUpdate={status => _onPlaybackStatusUpdate(status)}
             onFullscreenUpdate={onFullscreenUpdate}
           />
           <View style={styles.playBtnContainer}>
-            <TouchableOpacity style={styles.playButton} onPress={() =>
-                status.isPlaying ? video.current.pauseAsync() : video.current.playAsync()
-              }>
+            <TouchableOpacity style={styles.playButton} onPress={() => { playVideo() } }>
               {status.isPlaying ? <FontAwesome name="pause" size={20} color='white' /> : <FontAwesome name="play" size={20} color='white' /> }
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.playButton} onPress={() => { shuffleVideo() } }>
+              <FontAwesome name="random" size={20} color='white' />
             </TouchableOpacity>
           </View>
         </View>
@@ -113,7 +135,7 @@ const styles = StyleSheet.create({
   },
   playBtnContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
   },
   playButton: {

@@ -74,8 +74,8 @@ export const AppStack = () => {
             <FontAwesome name="gift" size={size} color={color} />
         ),}} name="Gift" component={GiftScreen} />
       <Tab.Screen options={{ 
-        title: 'SETTINGS',
-        tabBarLabel: 'Settings',
+        title: 'MY PAGE',
+        tabBarLabel: 'My Page',
         tabBarIcon: ({ color, size }) => (
             <FontAwesome name="cog" size={size} color={color} />
         ),}} name="Settings" component={SettingScreen} />

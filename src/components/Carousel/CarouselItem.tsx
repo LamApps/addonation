@@ -5,23 +5,18 @@ import { AppStyles } from '../../AppStyles';
 export const SLIDER_WIDTH = Dimensions.get('window').width + 80
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
-class Item extends React.PureComponent {
-    render() {
-        const { index,item } = this.props;
-        return <View style={styles.container} key={index}>
-            <View style={styles.innerContent}>
-                <Image
-                    source={{uri: item.imgUrl}}
-                    style={styles.image}
-                />
-                <Text style={styles.header}>{item.author}</Text>
-                <Text style={styles.body}>{item.quote}</Text>
-            </View>
+const CarouselItem = ({ item, index }:any) => (
+    <View style={styles.container} key={index}>
+        <View style={styles.innerContent}>
+            <Image
+                source={{uri: item.imgUrl}}
+                style={styles.image}
+            />
+            <Text style={styles.header}>{item.author}</Text>
+            <Text style={styles.body}>{item.quote}</Text>
         </View>
-    }
-}
-
-const CarouselItem = ({ item, index }:any) => <Item index={index} item={item} />
+    </View>
+)
 
 const styles = StyleSheet.create({
     container: {

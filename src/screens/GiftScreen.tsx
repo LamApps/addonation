@@ -10,25 +10,25 @@ import { FontAwesome5  } from '@expo/vector-icons';
 import { AppStyles } from '../AppStyles';
 
 export default function GiftScreen({ navigation }:any) {
-  const [totalSeconds, setTotalSeconds] = useState(0);
-  const [mySeconds, setMySeconds] = useState(0);
-  const auth = useAuth();
-  
-  useEffect(() => {
-    var uid = auth.authData.token;
-    const mySecRef = Firebase.database().ref('seconds/'+uid);
-    mySecRef.once('value', (snapshot: { val: () => any; }) => {
-      const data = snapshot.val();
-      setMySeconds(data || 0);
-    })
-  }, [])
+  const [totalSeconds, setTotalSeconds] = useState(0)
+  const [mySeconds, setMySeconds] = useState(0)
+  const auth = useAuth()
 
   useEffect(() => {
-    const ref = Firebase.database().ref('totalSeconds');
-    ref.once('value', (snapshot: { val: () => any; }) => {
-      const data = snapshot.val();
-      setTotalSeconds(data || 0);
+    const unsubscribe = navigation.addListener('focus', () => {
+      var uid = auth.authData?.token;
+      const mySecRef = Firebase.database().ref('seconds/'+uid)
+      mySecRef.once('value', (snapshot: { val: () => any; }) => {
+        const data = snapshot.val()
+        setMySeconds(data || 0)
+      })
+      var ref = Firebase.database().ref('totalSeconds')
+      ref.once('value', (snapshot: { val: () => any; }) => {
+        const data = snapshot.val()
+        setTotalSeconds(data || 0)
+      })
     })
+    return unsubscribe
   }, [])
 
   return (

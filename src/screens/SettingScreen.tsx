@@ -31,6 +31,12 @@ export default function SettingScreen({ navigation }:any) {
         shouldSetBadge: false,
       }),
     })
+    // var uid = auth.authData?.token;
+    // const mySecRef = firebase.database().ref('seconds/'+uid)
+    // mySecRef.once('value', (snapshot: { val: () => any; }) => {
+    //   const data = snapshot.val()
+    //   setCurrentGoal(data || 0)
+    // })
   }, [])
 
   const [date, setDate] = useState(new Date())
@@ -49,6 +55,10 @@ export default function SettingScreen({ navigation }:any) {
     {label: 'Twice a day', value: 2},
     {label: 'Thrice a day', value: 3},
   ])
+
+  const [goal, setGoal] = useState('')
+  const [currentGoal, setCurrentGoal] = useState(0)
+
 
   const onChange = async (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -202,48 +212,20 @@ export default function SettingScreen({ navigation }:any) {
         )
       }  keyExtractor={item => item.identifier} ListHeaderComponent={
         <>
-          <Text style={styles.titleText}>Change your Email?</Text>
-          <TextInput
-                  style={styles.inputStyle}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                  underlineColorAndroid="transparent"
-                  value={email}
-                  onChangeText={text => setEmail(text)}
-              ></TextInput>
-            {loading ? (
-                <ActivityIndicator color={AppStyles.color.primary} animating={true} size="large" style={{padding:12}} />
-              ) : (
-                <TouchableOpacity style={styles.createBtn} onPress={onChangeEmailHandler}>
-
-                  <FontAwesome name="envelope-o" size={18} color={AppStyles.color.primary}></FontAwesome>
-                  <Text style={{color:AppStyles.color.primary, fontWeight: 'bold', fontSize: AppStyles.fontSize.normal, marginLeft:10}}>CHANGE EMAIL</Text>
-                </TouchableOpacity>
-              )}
-          
-          <Text style={styles.titleText}>Change your password?</Text>
-          <InputPasswordToggle 
-            placeholder="Current Password"
-            style={styles.inputStyle}
-            iconColor='#777'
-            iconSize={18}
-            value={oldPassword}
-            onChangeText={setOldPassword} inputStyle={undefined} icon={undefined}/>
-          <InputPasswordToggle 
-            placeholder="New Password"
-            style={styles.inputStyle}
-            iconColor='#777'
-            iconSize={18}
-            value={newPassword}
-            onChangeText={setNewPassword} inputStyle={undefined} icon={undefined}/>
-            {loading ? (
-                <ActivityIndicator color={AppStyles.color.primary} animating={true} size="large" style={{padding:12}} />
-              ) : (
-                <TouchableOpacity style={styles.createBtn} onPress={onChangePasswordHandler}>
-                  <FontAwesome name="lock" size={18} color={AppStyles.color.primary}></FontAwesome>
-                  <Text style={{color:AppStyles.color.primary, fontWeight: 'bold', fontSize: AppStyles.fontSize.normal, marginLeft:10}}>CHANGE PASSWORD</Text>
-                </TouchableOpacity>
-              )}
+          <View>
+            <Text style={styles.titleText}>My total seconds</Text>
+            <View style={styles.topContainer}>
+              <View style={styles.secondContainer}>
+                  <Text style={styles.secondsWorldwide}>2312</Text>
+                  <Text style={{color:AppStyles.color.primary, fontSize:16, marginBottom: 5}}>Monthly</Text>
+              </View>
+              <View style={styles.secondContainer}>
+                  <Text style={styles.secondsWorldwide}>12321</Text>
+                  <Text style={{color:AppStyles.color.primary, fontSize:16, marginBottom: 5}}>Annually</Text>
+              </View>
+            </View>
+            <View style={{padding:20}}></View>
+          </View>
           <Text style={styles.titleText}>How often do you want to donate?</Text>
           <DropDownPicker
                 open={scheduleOpen}
@@ -280,7 +262,51 @@ export default function SettingScreen({ navigation }:any) {
           </TouchableOpacity>
         </>
       } ListFooterComponent={
-        <View style={{padding:20}}></View>
+        <>
+        <Text style={styles.titleText}>My Email address</Text>
+        <TextInput
+                style={styles.inputStyle}
+                placeholder="Email"
+                keyboardType="email-address"
+                underlineColorAndroid="transparent"
+                value={email}
+                onChangeText={text => setEmail(text)}
+            />
+          {loading ? (
+              <ActivityIndicator color={AppStyles.color.primary} animating={true} size="large" style={{padding:12}} />
+            ) : (
+              <TouchableOpacity style={styles.createBtn} onPress={onChangeEmailHandler}>
+
+                <FontAwesome name="envelope-o" size={18} color={AppStyles.color.primary}></FontAwesome>
+                <Text style={{color:AppStyles.color.primary, fontWeight: 'bold', fontSize: AppStyles.fontSize.normal, marginLeft:10}}>CHANGE EMAIL</Text>
+              </TouchableOpacity>
+            )}
+        
+        <Text style={styles.titleText}>Change my password</Text>
+        <InputPasswordToggle 
+          placeholder="Current Password"
+          style={styles.inputStyle}
+          iconColor='#777'
+          iconSize={18}
+          value={oldPassword}
+          onChangeText={setOldPassword} inputStyle={undefined} icon={undefined}/>
+        <InputPasswordToggle 
+          placeholder="New Password"
+          style={styles.inputStyle}
+          iconColor='#777'
+          iconSize={18}
+          value={newPassword}
+          onChangeText={setNewPassword} inputStyle={undefined} icon={undefined}/>
+          {loading ? (
+              <ActivityIndicator color={AppStyles.color.primary} animating={true} size="large" style={{padding:12}} />
+            ) : (
+              <TouchableOpacity style={styles.createBtn} onPress={onChangePasswordHandler}>
+                <FontAwesome name="lock" size={18} color={AppStyles.color.primary}></FontAwesome>
+                <Text style={{color:AppStyles.color.primary, fontWeight: 'bold', fontSize: AppStyles.fontSize.normal, marginLeft:10}}>CHANGE PASSWORD</Text>
+              </TouchableOpacity>
+            )}
+          <View style={{padding: 20}}></View>
+        </>
       } />
   );
 }
@@ -325,4 +351,21 @@ const styles = StyleSheet.create({
     fontSize: AppStyles.fontSize.medium,
     fontWeight: 'bold',
   },
+  topContainer: {
+    alignSelf: 'stretch',
+    paddingTop: 20,
+    paddingHorizontal: 30,
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+  },
+  secondContainer: {
+    alignItems: 'center'
+  },
+  secondsWorldwide: {
+    color: AppStyles.color.text,
+    fontSize: AppStyles.fontSize.extraLarge,
+    fontFamily: 'normal',
+    fontWeight: 'bold',
+  },
+
 });
