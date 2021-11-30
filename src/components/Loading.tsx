@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, ActivityIndicator} from 'react-native';
+import { AppStyles } from '../AppStyles';
 
 export const Loading = () => {
   return (
@@ -8,7 +9,7 @@ export const Loading = () => {
         flex: 1,
         justifyContent: 'center',
       }}>
-      <ActivityIndicator color={'#000'} animating={true} size="small" />
+      <ActivityIndicator color={AppStyles.color.primary} animating={true} size="large" />
     </View>
   );
 };

@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
-import Button from 'react-native-button';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import moment from 'moment';
 
 import { AppStyles } from '../AppStyles';
 
 export default function NewsDetailScreen({route, navigation}) {
   const { item } = route.params;
+  const date = new Date(item.quote)
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>{item.author}</Text>
@@ -15,9 +17,9 @@ export default function NewsDetailScreen({route, navigation}) {
             style={styles.image}
         />
       </View>
-      <Text style={styles.time}>{item.quote}</Text>
+      <Text style={styles.time}>{moment([date.getFullYear(), date.getMonth(), date.getDate()]).fromNow()}</Text>
       <Text style={styles.body}>{item.description}</Text>
-      <Button containerStyle={styles.backButton} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}} onPress={()=>{navigation.goBack()}}>GO BACK</Button>
+      <TouchableOpacity containerStyle={styles.backButton} onPress={()=>{navigation.goBack()}}><Text style={{color: 'white'}}>GO BACK</Text></TouchableOpacity>
     </ScrollView>
   );
 }
@@ -79,6 +81,8 @@ const styles = StyleSheet.create({
       backgroundColor: AppStyles.color.primary, 
       marginTop: 20,
       marginRight: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
       alignSelf: 'flex-end'
     },
 });

@@ -1,27 +1,28 @@
 import React from 'react';
 import { View, FlatList, StyleSheet, Text, Image } from 'react-native';
-import Button from "react-native-button";
+import moment from 'moment';
 
 import { AppStyles } from '../AppStyles';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 const appData = [
     {
         id: "1",
         author: "Alice Walker",
-        quote: "2021/09/21 15:21:00",
+        quote: "2021-11-21T15:21:00Z",
         description: "Lorem ipsum dolor sit amet is the most popular dummy text in the world! You already know that? Yeah, Good! But never confident you can not do all things in the world with it!",
         imgUrl: "https://source.unsplash.com/200x300/?nature"
     },
     {
         id: "2",
         author: "James Coulter",
-        quote: "2021/09/21 15:21:00",
+        quote: "2021-09-21T15:21:00Z",
         description: "Lorem ipsum dolor sit amet is the most popular dummy text in the world! You already know that? Yeah, Good! But never confident you can not do all things in the world with it!",
         imgUrl: "https://source.unsplash.com/200x300/?water"
     },
     {
         id: "3",
         author: "Neymar John",
-        quote: "2021/09/21 15:21:00",
+        quote: "2021-04-21T15:21:00Z",
         description: "Lorem ipsum dolor sit amet is the most popular dummy text in the world! You already know that? Yeah, Good! But never confident you can not do all things in the world with it!",
         imgUrl: "https://source.unsplash.com/200x300/?island"
     }
@@ -29,6 +30,7 @@ const appData = [
 class Item extends React.PureComponent {
     render() {
         const { item, navigation } = this.props;
+        const date = new Date(item.quote)
         return <View style={styles.listContainer}>
         <View style={styles.innerContent}>
             <Image
@@ -36,9 +38,9 @@ class Item extends React.PureComponent {
                 style={styles.image}
             />
             <Text style={styles.header}>{item.author}</Text>
-            <Text style={styles.time}>{item.quote}</Text>
+            <Text style={styles.time}>{moment([date.getFullYear(), date.getMonth(), date.getDate()]).fromNow()}</Text>
             <Text style={styles.body}>{item.description}</Text>
-            <Button containerStyle={styles.readMoreButton} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}} onPress={()=>{navigation.navigate('NewsDetail', {item: item})}}>Read More</Button>
+            <TouchableOpacity style={styles.readMoreButton} onPress={()=>{navigation.navigate('NewsDetail', {item: item})}}><Text style={{color: 'white'}}>Read More</Text></TouchableOpacity>
         </View>
     </View>
     }
@@ -102,6 +104,8 @@ const styles = StyleSheet.create({
         width: 100,
         alignSelf: 'flex-end',
         backgroundColor: AppStyles.color.primary,
+        alignItems: 'center',
+        justifyContent: 'center',  
         marginTop: 5,
         marginRight: 20,
     },

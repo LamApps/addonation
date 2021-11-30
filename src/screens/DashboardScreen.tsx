@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, ScrollView, Text, View, TouchableOpacity } from 'react-native';
-import Firebase from "../config/firebase";
-import {useAuth} from '../contexts/Auth';
+import React, {useState, useEffect} from 'react'
+import { StyleSheet, ScrollView, Text, View, TouchableOpacity } from 'react-native'
+import Firebase from "../config/firebase"
+import {useAuth} from '../contexts/Auth'
 
-import Carousel from '../components/Carousel/Carousel';
-import Seconds from '../components/Seconds';
+import Carousel from '../components/Carousel/Carousel'
+import Seconds from '../components/Seconds'
 
-import { FontAwesome } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons' 
 
-import { AppStyles } from '../AppStyles';
+import { AppStyles } from '../AppStyles'
 
 export default function DashboardScreen({ navigation }:any) {
   const [totalSeconds, setTotalSeconds] = useState(0)
@@ -17,14 +17,14 @@ export default function DashboardScreen({ navigation }:any) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      var uid = auth.authData?.token;
+      var uid = auth.authData?.token
       const mySecRef = Firebase.database().ref('seconds/'+uid)
-      mySecRef.once('value', (snapshot: { val: () => any; }) => {
+      mySecRef.once('value', (snapshot: { val: () => any }) => {
         const data = snapshot.val()
         setMySeconds(data.total || 0)
       })
       var ref = Firebase.database().ref('totalSeconds')
-      ref.once('value', (snapshot: { val: () => any; }) => {
+      ref.once('value', (snapshot: { val: () => any }) => {
         const data = snapshot.val()
         setTotalSeconds(data || 0)
       })
@@ -36,7 +36,7 @@ export default function DashboardScreen({ navigation }:any) {
     <ScrollView style={styles.scrollView}>
         <Seconds totalSeconds={totalSeconds} mySeconds={mySeconds} />
         <View style={styles.carouselContainer}>
-            <Carousel />
+            <Carousel navigation={navigation} />
         </View>
         <View style={styles.donateContainer}>
             <Text style={{color:AppStyles.color.primary, fontSize:AppStyles.fontSize.large, fontWeight: 'bold'}}>SIX SECONDS</Text>
@@ -48,7 +48,7 @@ export default function DashboardScreen({ navigation }:any) {
             </TouchableOpacity>
         </View>
     </ScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -76,4 +76,4 @@ const styles = StyleSheet.create({
     backgroundColor: AppStyles.color.primary,
     elevation: 8,
   }
-});
+})
