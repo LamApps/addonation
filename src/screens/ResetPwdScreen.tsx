@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import Button from "react-native-button";
 import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import Firebase from "../config/firebase";
 
@@ -31,8 +30,8 @@ export default function ResetPwdScreen({navigation}:any) {
               keyboardType="email-address"
               underlineColorAndroid="transparent"
             ></TextInput>
-            <Button containerStyle={styles.resetButton} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>RESET PASSWORD</Button>
-            <Button containerStyle={styles.signInButton} onPress={() => navigation.navigate('Home')} style={{color:'black', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>SIGN IN</Button>
+            <TouchableOpacity style={styles.resetButton} ><Text style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>RESET PASSWORD</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.signInButton} onPress={() => navigation.navigate('Home')}><Text style={{color:'black', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>SIGN IN</Text></TouchableOpacity>
         </View>
     </ScrollView>
   );
@@ -80,16 +79,18 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   resetButton: { 
-    padding: 15, 
-    overflow: 'hidden', 
+    padding: 13, 
     borderRadius: 30, 
-    backgroundColor: '#EC6700',
+    backgroundColor: AppStyles.color.primary,
     marginBottom: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   signInButton: {
-    padding: 15, 
-    overflow: 'hidden', 
+    padding: 13, 
     borderRadius: 30, 
-    backgroundColor: '#d1d1d1' 
+    backgroundColor: '#d1d1d1',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

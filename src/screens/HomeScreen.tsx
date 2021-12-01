@@ -1,14 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import Button from "react-native-button";
 import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import {useAuth} from '../contexts/Auth';
 import Firebase from "../config/firebase";
+import Constants from 'expo-constants';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+
+import firebase from 'firebase';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { AppStyles } from '../AppStyles';
 
 import InputPasswordToggle from '../components/InputPasswordToggle';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function HomeScreen({ navigation }:any) {
   const [email, setEmail] = useState('');
@@ -17,6 +23,31 @@ export default function HomeScreen({ navigation }:any) {
   const [totalSeconds, setTotalSeconds] = useState(0);
 
   const auth = useAuth();
+
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
+    {
+      expoClientId: '675640908306-eastohfr65lgv76bajr0ajk5qg14fola.apps.googleusercontent.com',
+      iosClientId: Constants.manifest.extra.iosOauthClientId,
+      androidClientId: Constants.manifest.extra.androidOauthClientId,
+    },
+  );
+  useEffect(() => {
+    if (response?.type === 'success') {
+      isLoading(true)
+      const { id_token } = response.params;
+      const credential = firebase.auth.GoogleAuthProvider.credential(id_token)
+      auth.signInWithCredential(credential)
+      .then(value=>{
+        isLoading(false)
+      })
+      .catch(error => {
+        isLoading(false)
+        Alert.alert('Error', error.message, [
+          { text: 'OK' },
+        ]);
+      }) 
+    }
+  }, [response]);
 
   useEffect(() => {
     var ref = Firebase.database().ref('totalSeconds')
@@ -44,6 +75,7 @@ export default function HomeScreen({ navigation }:any) {
       ]);
     }
   };
+
   return (
       <ScrollView style={styles.scrollView}>
           <View style={styles.topContainer}>
@@ -78,9 +110,9 @@ export default function HomeScreen({ navigation }:any) {
                 value={password}
                 onChangeText={setPassword} inputStyle={undefined} icon={undefined}/>
               {loading ? (
-                <ActivityIndicator color={'#000'} animating={true} size="small" />
+                <ActivityIndicator color={AppStyles.color.primary} animating={true} size="large" />
               ) : (
-                <Button containerStyle={styles.signInButton} onPress={signIn} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>Sign in</Button>
+                <TouchableOpacity style={styles.signInButton} onPress={signIn}><Text style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>Sign In</Text></TouchableOpacity>
               )}
               <View
                 style={{
@@ -90,7 +122,7 @@ export default function HomeScreen({ navigation }:any) {
                 }}
               />
               <View style={styles.socialSignin}>
-                <TouchableOpacity style={styles.socialButton}><MaterialCommunityIcons name="google" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
+                <TouchableOpacity style={styles.socialButton}><MaterialCommunityIcons name="google" size={32} color={AppStyles.color.secondary} onPress={()=>{promptAsync()}} /></TouchableOpacity>
                 <TouchableOpacity style={styles.socialButton}><MaterialCommunityIcons name="facebook" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
                 <TouchableOpacity style={styles.socialButton}><MaterialCommunityIcons name="twitter" size={32} color={AppStyles.color.secondary} /></TouchableOpacity>
               </View>
@@ -147,10 +179,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   signInButton: { 
-    padding: 15, 
+    padding: 13, 
     overflow: 'hidden', 
     borderRadius: 30, 
-    backgroundColor: '#EC6700' 
+    backgroundColor: AppStyles.color.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   socialSignin: {
     flexDirection: 'row',

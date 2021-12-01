@@ -94,13 +94,13 @@ export default function DonateScreen({ navigation }:any) {
           monthSnapshot.forEach(child => {
             const val = child.val()
             if(val.year === year && val.month === month) {
-              child.ref.update({duration: val.duration+duration})
+              child.ref.update({value: val.value+duration})
               matchCount++
             }
           })
-          if(matchCount == 0) monthSnapshot.ref.push({year: year, month: month, duration: duration})
+          if(matchCount == 0) monthSnapshot.ref.push({year: year, month: month, value: duration})
         }else{
-          monthSnapshot.ref.push({year: year, month: month, duration: duration})
+          monthSnapshot.ref.push({year: year, month: month, value: duration})
         }
       })
       setMySeconds(mySeconds + duration)

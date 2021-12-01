@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import Button from "react-native-button";
 import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import {useAuth} from '../contexts/Auth';
 import Firebase from "../config/firebase";
@@ -86,7 +85,7 @@ export default function SignUpScreen({navigation}:any) {
             {loading ? (
                 <ActivityIndicator color={'#000'} animating={true} size="small" />
               ) : (
-                <Button containerStyle={styles.signInButton} onPress={signUp} style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>CREATE AN ACCOUNT</Button>
+                <TouchableOpacity style={styles.signInButton} onPress={signUp} ><Text style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>CREATE AN ACCOUNT</Text></TouchableOpacity>
               )}
             <View
               style={{
@@ -151,10 +150,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   signInButton: { 
-    padding: 15, 
-    overflow: 'hidden', 
+    padding: 13, 
     borderRadius: 30, 
-    backgroundColor: '#EC6700' 
+    backgroundColor: AppStyles.color.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   socialSignin: {
     flexDirection: 'row',

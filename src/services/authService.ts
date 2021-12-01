@@ -1,7 +1,6 @@
 import Firebase from '../config/firebase';
 const auth = Firebase.auth();
 const database = Firebase.database();
-import firebase from 'firebase';
 
 export type AuthData = {
     token: string;
@@ -15,6 +14,26 @@ export type AuthData = {
     //the API will resolve with some token and another datas as the below
     return new Promise((resolve, reject) => {
       auth.signInWithEmailAndPassword(email, password)
+      .then((userCredential: { user: any; }) => {
+        // Signed in
+        var user = userCredential.user;
+        // var token = await user.getIdToken();
+        resolve({
+          token: user.uid,
+          email: user.email,
+          name: user.displayName
+        })
+        // ...
+      })
+      .catch((error: { code: any; message: any; }) => {
+        reject(error)
+      });
+    });
+  };
+
+  const signInWithCredential = (credential:string): Promise<AuthData> => {
+    return new Promise((resolve, reject) => {
+      auth.signInWithCredential(credential)
       .then((userCredential: { user: any; }) => {
         // Signed in
         var user = userCredential.user;
@@ -73,6 +92,7 @@ export type AuthData = {
   
   export const authService = {
     signIn,
+    signInWithCredential,
     signUp,
     signOut,
   };

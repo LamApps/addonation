@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "675640908306",
+    "firebase_url": "https://addonation-a9598-default-rtdb.firebaseio.com",
+    "project_id": "addonation-a9598",
+    "storage_bucket": "addonation-a9598.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675640908306:android:226d042f509bf2af31d6cb",
+        "android_client_info": {
+          "package_name": "com.addonation.donatesixsec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "675640908306-tgvhelq3f2vbo83hvfp4un9iojk8nqkd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvxfYa3CJ9nxSmTbbi91tmrDVzmbt0Y4M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "675640908306-tgvhelq3f2vbo83hvfp4un9iojk8nqkd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "675640908306-f2vspgu29mt6k3rmmt6hjq3endj70idr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.addonation.donatesixsec"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

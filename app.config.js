@@ -23,7 +23,8 @@ export default {
       bundleIdentifier: "com.addonation.donatesixsec",
       buildNumber: "1.0.0",
       supportsTablet: true,
-      requireFullScreen: true
+      requireFullScreen: true,
+      googleServicesFile: "./GoogleService-Info.plist",
     },
     android: {
       package: "com.addonation.donatesixsec",
@@ -35,6 +36,7 @@ export default {
       permissions: [
         "RECEIVE_BOOT_COMPLETED"
       ],
+      googleServicesFile: "./google-services.json",
     },
     web: {
       favicon: "./assets/favicon.png"
@@ -46,7 +48,9 @@ export default {
       databaseURL: process.env.DATABASE_URL,
       storageBucket: process.env.STORAGE_BUCKET,
       messagingSenderId: process.env.MESSAGING_SENDER_ID,
-      appId: process.env.APP_ID
+      appId: process.env.APP_ID,
+      androidOauthClientId: process.env.ANDROID_OAUTH_CLIENT_ID,
+      iosOauthClientId: process.env.IOS_OAUTH_CLIENT_ID
     },
     plugins: [
       [
@@ -57,6 +61,7 @@ export default {
           mode: "production"
         }
       ]
-    ]
+    ],
+    scheme: "mycoolredirect"
   }
 }
