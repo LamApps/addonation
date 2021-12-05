@@ -3,7 +3,7 @@ import 'dotenv/config';
 
 export default {
   expo: {
-    name: "addonation",
+    name: "Addonation",
     slug: "addonation",
     version: "1.0.0",
     orientation: "portrait",

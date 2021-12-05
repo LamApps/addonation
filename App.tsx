@@ -8,9 +8,7 @@ const App = () => {
   return (
     <AuthProvider>
       <SafeAreaView style={styles.container}>
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
           <Router />
-        </KeyboardAvoidingView>
       </SafeAreaView>
       <StatusBar style="light" />
     </AuthProvider>
