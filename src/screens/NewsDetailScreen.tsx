@@ -2,24 +2,27 @@ import React from 'react';
 import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
+import Constants from 'expo-constants';
 
 import { AppStyles } from '../AppStyles';
 
+const baseUrl = Constants.manifest.extra.apiBaseUrl
+
 export default function NewsDetailScreen({route, navigation}) {
   const { item } = route.params;
-  const date = new Date(item.quote)
+  const date = new Date(item.created_at)
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>{item.author}</Text>
+      <Text style={styles.header}>{item.title}</Text>
       <View style={styles.imageContainer}>
         <Image
-            source={{uri: item.imgUrl}}
+            source={{uri: baseUrl+'/storage/news/'+item.featured_img}}
             style={styles.image}
         />
       </View>
       <Text style={styles.time}>{moment([date.getFullYear(), date.getMonth(), date.getDate()]).fromNow()}</Text>
-      <Text style={styles.body}>{item.description}</Text>
-      <TouchableOpacity containerStyle={styles.backButton} onPress={()=>{navigation.goBack()}}><Text style={{color: 'white'}}>GO BACK</Text></TouchableOpacity>
+      <Text style={styles.body}>{item.content}</Text>
+      <TouchableOpacity style={styles.backButton} onPress={()=>{navigation.goBack()}}><Text style={{color: 'white'}}>GO BACK</Text></TouchableOpacity>
     </ScrollView>
   );
 }
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
       overflow: 'hidden', 
       borderRadius: 30, 
       backgroundColor: AppStyles.color.primary, 
-      marginTop: 20,
+      marginVertical: 20,
       marginRight: 20,
       alignItems: 'center',
       justifyContent: 'center',

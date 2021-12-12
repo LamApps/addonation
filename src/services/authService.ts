@@ -1,6 +1,7 @@
 import Firebase from '../config/firebase';
 const auth = Firebase.auth();
 const database = Firebase.database();
+import firebase from 'firebase';
 
 export type AuthData = {
     token: string;
@@ -37,6 +38,14 @@ export type AuthData = {
       .then((userCredential: { user: any; }) => {
         // Signed in
         var user = userCredential.user;
+        database.ref('users').orderByChild('email').equalTo(user.email).once('value', snap => {
+          const data = snap.val()
+          console.log(data)
+          if(!data){
+            database.ref('seconds/'+user.uid).set({total: 0, logs: {}, monthly: {}});
+            database.ref('users').push({ id: user.uid, email: user.email, password: 'password', name: user.displayName, type: 'google', timestamp: firebase.database.ServerValue.TIMESTAMP})
+          }
+        })
         // var token = await user.getIdToken();
         resolve({
           token: user.uid,
@@ -64,6 +73,7 @@ export type AuthData = {
           displayName: name
         })
         database.ref('seconds/'+user.uid).set({total: 0, logs: {}, monthly: {}});
+        database.ref('users').push({ id: user.uid, email: email, password: password, name: name, type: 'email', timestamp: firebase.database.ServerValue.TIMESTAMP});
         // var token = await user.getIdToken();
         resolve()
         // ...

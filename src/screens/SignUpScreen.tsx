@@ -83,7 +83,7 @@ export default function SignUpScreen({navigation}:any) {
               value={password}
               onChangeText={setPassword}/>
             {loading ? (
-                <ActivityIndicator color={'#000'} animating={true} size="small" />
+                <ActivityIndicator color={AppStyles.color.primary} animating={true} size="large" />
               ) : (
                 <TouchableOpacity style={styles.signInButton} onPress={signUp} ><Text style={{color:'white', fontSize: AppStyles.fontSize.normal, fontWeight:'bold'}}>CREATE AN ACCOUNT</Text></TouchableOpacity>
               )}

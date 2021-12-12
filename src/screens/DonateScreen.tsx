@@ -1,27 +1,46 @@
 import React, { useRef, useState, useEffect} from 'react';
-import { StyleSheet, ScrollView, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, Text, View, Alert, TouchableOpacity } from 'react-native';
 import { Video, AVPlaybackStatus, VideoFullscreenUpdateEvent } from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import Firebase from "../config/firebase";
 import firebase from 'firebase'
 import {useAuth} from '../contexts/Auth';
 import Seconds from '../components/Seconds';
+import Constants from 'expo-constants';
 
-import { FontAwesome } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons';
 
 import { AppStyles } from '../AppStyles';
 
-const dummy_videos = [
-  'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-  'http://res.cloudinary.com/dxkxvfo2o/video/upload/v1608169738/video1_cvrjfm.mp4',
-]
+const baseUrl = Constants.manifest.extra.apiBaseUrl
+
 // const VIDEO_WIDTH = Dimensions.get('window').width
 export default function DonateScreen({ navigation }:any) {
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [mySeconds, setMySeconds] = useState(0);
-  const [currentUri, setCurrentUri] = useState(dummy_videos[Math.floor(Math.random() * 2)])
+  const [currentUri, setCurrentUri] = useState('')
+  const [videos, setVideos] = useState([]);
   const auth = useAuth();
+
+  //get all videos from api
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `${baseUrl}/api/get_public_videos`,
+    }).then((response) => {
+      const data = response.data
+      setVideos(data)
+      const randomIndex = Math.floor(Math.random() * data.length)
+      if(randomIndex>0) setCurrentUri(baseUrl+'/storage/video/'+data[randomIndex].url)
+      else setCurrentUri('')
+    }).catch(error=>{
+      Alert.alert('Error', error.message, [
+          { text: 'OK' },
+        ]);
+    })
+  }, [])
+
   useEffect(() => {
     var uid = auth.authData.token;
     const mySecRef = Firebase.database().ref('seconds/'+uid);
@@ -63,7 +82,7 @@ export default function DonateScreen({ navigation }:any) {
     }
   }
   const shuffleVideo = () => {
-    setCurrentUri(dummy_videos[Math.floor(Math.random() * 2)])
+    setCurrentUri(baseUrl+'/storage/video/'+videos[Math.floor(Math.random() * videos.length)].url)
     video.current.presentFullscreenPlayer()
     video.current.playFromPositionAsync(0)
   }
@@ -111,8 +130,8 @@ export default function DonateScreen({ navigation }:any) {
     <ScrollView style={styles.scrollView}>
         <Seconds totalSeconds={totalSeconds} mySeconds={mySeconds} />
         <View style={styles.textContainer}>
-          <Text style={{textAlign: 'center'}}>
-            <Text style={{color: AppStyles.color.primary}}>ADDonation.org</Text> is a not for profit organization supporting environmental nonprofit organizations around the world. We raise funds by <Text style={{color: AppStyles.color.primary}}>6 second</Text> donations from our viewers. Just watching 6 seconds commercial adverts will help out reducing commercial wastes around the world. We strongly believe in our goodwill and <Text style={{color: AppStyles.color.primary}}>100%</Text> of all our profit will be donated to create a virtuous circle to fix the world!!!
+          <Text style={{lineHeight: 25}}>
+            With <Text style={{color: AppStyles.color.primary}}>ADDonation.org</Text>, every single second you watch our ad will be counted meaningfully to reduce carbon footprints and preserve natural wildlife. Don't hesitate, just donate your <Text style={{color: AppStyles.color.primary}}>6 seconds</Text> to make a better world.
           </Text>
         </View>
         <View style={{flex: 1}}>

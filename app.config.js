@@ -50,7 +50,8 @@ export default {
       messagingSenderId: process.env.MESSAGING_SENDER_ID,
       appId: process.env.APP_ID,
       androidOauthClientId: process.env.ANDROID_OAUTH_CLIENT_ID,
-      iosOauthClientId: process.env.IOS_OAUTH_CLIENT_ID
+      iosOauthClientId: process.env.IOS_OAUTH_CLIENT_ID,
+      apiBaseUrl: process.env.API_BASE_URL
     },
     plugins: [
       [

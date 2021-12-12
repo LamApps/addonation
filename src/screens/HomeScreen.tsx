@@ -36,6 +36,7 @@ export default function HomeScreen({ navigation }:any) {
       isLoading(true)
       const { id_token } = response.params;
       const credential = firebase.auth.GoogleAuthProvider.credential(id_token)
+      // Firebase.database().ref('users').push({ id: credential.user.uid, email: email, password: password, name: name, type: 'email'});
       auth.signInWithCredential(credential)
       .then(value=>{
         isLoading(false)

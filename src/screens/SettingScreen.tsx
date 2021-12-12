@@ -225,7 +225,7 @@ export default function SettingScreen({ navigation }:any) {
       }  keyExtractor={item => item.identifier} ListHeaderComponent={
         <>
           <View>
-            <Text style={styles.titleText}>My total seconds</Text>
+            <Text style={styles.titleText}>My seconds</Text>
             <View style={styles.topContainer}>
               <View style={styles.secondContainer}>
                   <Text style={styles.secondsWorldwide}>{myMonthlySeconds}</Text>
