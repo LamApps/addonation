@@ -7,10 +7,12 @@ import { StatusBar } from 'expo-status-bar';
 const App = () => {
   return (
     <AuthProvider>
-      <SafeAreaView style={styles.container}>
-          <Router />
-      </SafeAreaView>
-      <StatusBar style="light" />
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <Router />
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+      <StatusBar style="auto" />
     </AuthProvider>
   );
 };

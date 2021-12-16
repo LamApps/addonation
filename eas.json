@@ -19,6 +19,16 @@
     "production": {}
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "../path/to/api-xxx-yyy-zzz.json",
+        "track": "internal"
+      },
+      "ios": {
+        "appleId": "seankang@addonation.org",
+        "ascAppId": "1600182991",
+        "appleTeamId": "UN3Z63N84B"
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -7,6 +7,8 @@ import { getHeaderTitle } from '@react-navigation/elements';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { AppStyles } from '../AppStyles';
+import Constants from 'expo-constants';
+import axios from 'axios';
 
 import DashboardScreen from '../screens/DashboardScreen';
 import DonateScreen from '../screens/DonateScreen';
@@ -17,6 +19,7 @@ import SettingScreen from '../screens/SettingScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const baseUrl = Constants.manifest.extra.apiBaseUrl
 
 function News() {
   return (
@@ -33,6 +36,18 @@ function News() {
   );
 }
 export const AppStack = () => {
+  const [hasNotifications, setHasNotifications] = useState(null)
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `${baseUrl}/api/get_public_events`,
+    }).then((response) => {
+      const data = response.data
+      setHasNotifications(data.length || null)
+    }).catch(error=>{
+    })
+  }, [])
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -70,6 +85,7 @@ export const AppStack = () => {
       <Tab.Screen options={{ 
         title: 'THANK YOU EVENT',
         tabBarLabel: 'Gift',
+        tabBarBadge: hasNotifications,
         tabBarIcon: ({ color, size }) => (
             <FontAwesome name="gift" size={size} color={color} />
         ),}} name="Gift" component={GiftScreen} />

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import {useAuth} from '../contexts/Auth';
 import Firebase from "../config/firebase";
 import Constants from 'expo-constants';
@@ -149,7 +149,6 @@ const styles = StyleSheet.create({
   secondsWorldwide: {
     color: 'white',
     fontSize: AppStyles.fontSize.extraLarge,
-    fontFamily: 'normal',
     fontWeight: 'bold',
   },
   logo: {
@@ -173,7 +172,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 1,
     borderColor: AppStyles.color.border,
-    padding: 8,
+    padding: 10,
     paddingLeft: 15,
     marginBottom: 15,
     width: '100%',

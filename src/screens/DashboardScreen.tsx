@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { StyleSheet, ScrollView, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, ScrollView, View, Text, TouchableOpacity } from 'react-native'
 import Firebase from "../config/firebase"
 import {useAuth} from '../contexts/Auth'
 

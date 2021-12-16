@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Alert, Text, SafeAreaView, View, TouchableOpacity, Platform, FlatList, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, Alert, SafeAreaView, View, Text, TouchableOpacity, Platform, FlatList, TextInput, ActivityIndicator } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -52,14 +52,10 @@ export default function SettingScreen({ navigation }:any) {
   }, [])
 
   const [date, setDate] = useState(new Date())
-  const [show, setShow] = useState(false)
   const [email, setEmail] = useState(auth.authData?.email)
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
 
-  const showTimepicker = () => {
-    setShow(true)
-  }
   const [scheduleOpen, setScheduleOpen] = useState(false)
   const [scheduleValue, setScheduleValue] = useState(1)
   const [scheduleItems, setScheduleItems] = useState([
@@ -74,31 +70,33 @@ export default function SettingScreen({ navigation }:any) {
 
   const onChange = async (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
-    setShow(Platform.OS === 'ios');
+    console.log(currentDate)
     if(currentDate) {
       setDate(currentDate);
-      if(alarms.length<scheduleValue) {
-        const identifier = await Notifications.scheduleNotificationAsync({
-          content: {
-            title: 'Time to donate!',
-            body: "Now you can donate your 6 seconds to fix the world!",
-          },
-          trigger: {
-            hour: currentDate.getHours(),
-            minute: currentDate.getMinutes(),
-            repeats: true,
-          },
-        })
-        setAlarms([...alarms, {time: currentDate, identifier: identifier}])
-        AsyncStorage.setItem('@Schedule', JSON.stringify({count: scheduleValue, alarms: [...alarms, {time: currentDate, identifier: identifier}]}))
-      }else{
-        Alert.alert('Error', 'You can not create a schedule anymore.', [
-          { text: 'OK' },
-        ]);
-      }
+
     }
   };
-
+  const onCreateSchedule = async ()=>{
+    if(alarms.length<scheduleValue) {
+      const identifier = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Time to donate!',
+          body: "Now you can donate your 6 seconds to fix the world!",
+        },
+        trigger: {
+          hour: date.getHours(),
+          minute: date.getMinutes(),
+          repeats: true,
+        },
+      })
+      setAlarms([...alarms, {time: date, identifier: identifier}])
+      AsyncStorage.setItem('@Schedule', JSON.stringify({count: scheduleValue, alarms: [...alarms, {time: date, identifier: identifier}]}))
+    }else{
+      Alert.alert('Error', 'You can not create a schedule anymore.', [
+        { text: 'OK' },
+      ]);
+    }
+  }
   async function loadStorageData(): Promise<void> {
     try {
       //Try get the data from Async Storage
@@ -213,7 +211,7 @@ export default function SettingScreen({ navigation }:any) {
       <FlatList style={styles.container} data={alarms} renderItem={
         ({ item }) => (
           <View style={styles.itemContainer}>
-            <Text style={styles.itemText}>{moment(item.time).format('HH:mm A')}
+            <Text style={styles.itemText}>{moment(item.time).format('hh:mm A')}
             </Text>
             <Text style={styles.itemText}>
               <TouchableOpacity onPress={()=>{onRemoveSchedule(item)}}>
@@ -258,17 +256,15 @@ export default function SettingScreen({ navigation }:any) {
                   paddingLeft: 15, borderColor: '#d1d1d1',
               }}
               />
-          {show && (
             <DateTimePicker
                 testID="dateTimePicker"
                 value={date}
                 mode="time"
                 is24Hour={false}
-                display="default"
+                display="spinner"
                 onChange={onChange}
               />
-          )}
-          <TouchableOpacity style={styles.createBtn} onPress={showTimepicker}>
+          <TouchableOpacity style={styles.createBtn} onPress={onCreateSchedule}>
             <FontAwesome name="plus" size={18} color={AppStyles.color.primary}></FontAwesome>
             <Text style={{color:AppStyles.color.primary, fontWeight: 'bold', fontSize: AppStyles.fontSize.normal, marginLeft:10}}>CREAT SCHEDULE</Text>
           </TouchableOpacity>
@@ -332,7 +328,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 1,
     borderColor: AppStyles.color.border,
-    padding: 8,
+    padding: 10,
     paddingLeft: 15,
     marginBottom: 15,
   },
@@ -376,7 +372,6 @@ const styles = StyleSheet.create({
   secondsWorldwide: {
     color: AppStyles.color.text,
     fontSize: AppStyles.fontSize.extraLarge,
-    fontFamily: 'normal',
     fontWeight: 'bold',
   },
 

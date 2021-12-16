@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 import { AppStyles } from '../AppStyles';
 
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
   secondsWorldwide: {
     color: AppStyles.color.text,
     fontSize: AppStyles.fontSize.extraLarge,
-    fontFamily: 'normal',
     fontWeight: 'bold',
   },
 });

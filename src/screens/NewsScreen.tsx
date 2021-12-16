@@ -1,57 +1,56 @@
-import React from 'react';
-import { View, FlatList, StyleSheet, Text, Image } from 'react-native';
+import React, { useState, useEffect} from 'react';
+import { View, Text, FlatList, StyleSheet, Image, Alert } from 'react-native';
 import moment from 'moment';
+import axios from 'axios';
+import Constants from 'expo-constants';
 
 import { AppStyles } from '../AppStyles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-const appData = [
-    {
-        id: "1",
-        author: "Alice Walker",
-        quote: "2021-11-21T15:21:00Z",
-        description: "Lorem ipsum dolor sit amet is the most popular dummy text in the world! You already know that? Yeah, Good! But never confident you can not do all things in the world with it!",
-        imgUrl: "https://source.unsplash.com/200x300/?nature"
-    },
-    {
-        id: "2",
-        author: "James Coulter",
-        quote: "2021-09-21T15:21:00Z",
-        description: "Lorem ipsum dolor sit amet is the most popular dummy text in the world! You already know that? Yeah, Good! But never confident you can not do all things in the world with it!",
-        imgUrl: "https://source.unsplash.com/200x300/?water"
-    },
-    {
-        id: "3",
-        author: "Neymar John",
-        quote: "2021-04-21T15:21:00Z",
-        description: "Lorem ipsum dolor sit amet is the most popular dummy text in the world! You already know that? Yeah, Good! But never confident you can not do all things in the world with it!",
-        imgUrl: "https://source.unsplash.com/200x300/?island"
-    }
-];
+
+const baseUrl = Constants.manifest.extra.apiBaseUrl
+
 class Item extends React.PureComponent {
     render() {
         const { item, navigation } = this.props;
-        const date = new Date(item.quote)
+        const date = new Date(item.created_at)
+        const viewContent = item.content.slice(0, 200)
         return <View style={styles.listContainer}>
-        <View style={styles.innerContent}>
-            <Image
-                source={{uri: item.imgUrl}}
-                style={styles.image}
-            />
-            <Text style={styles.header}>{item.author}</Text>
-            <Text style={styles.time}>{moment([date.getFullYear(), date.getMonth(), date.getDate()]).fromNow()}</Text>
-            <Text style={styles.body}>{item.description}</Text>
-            <TouchableOpacity style={styles.readMoreButton} onPress={()=>{navigation.navigate('NewsDetail', {item: item})}}><Text style={{color: 'white'}}>Read More</Text></TouchableOpacity>
+            <View style={styles.innerContent}>
+                <View style={styles.imageWrapper}>
+                    <Image
+                        source={{uri: baseUrl+'/storage/news/'+item.featured_img}}
+                        style={styles.image}
+                    />
+                </View>
+                <Text style={styles.header}>{item.title}</Text>
+                <Text style={styles.time}>{moment([date.getFullYear(), date.getMonth(), date.getDate()]).fromNow()}</Text>
+                <Text style={styles.body}>{viewContent}</Text>
+                <TouchableOpacity style={styles.readMoreButton} onPress={()=>{navigation.navigate('NewsDetail', {item: item})}}><Text style={{color: 'white'}}>Read More</Text></TouchableOpacity>
+            </View>
         </View>
-    </View>
     }
 }
 
 export default function NewsScreen({navigation}) {
   const renderItem = ({ item }) => <Item item={item} navigation={navigation} />;
+  const [news, setNews] = useState([]);
 
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `${baseUrl}/api/get_public_news`,
+    }).then((response) => {
+      const data = response.data
+      setNews(data)
+    }).catch(error=>{
+        Alert.alert('Error', error.message, [
+            { text: 'OK' },
+          ]);
+    });
+  }, [])
   return (
       <View style={styles.container}>
-        <FlatList data={appData} renderItem={renderItem} keyExtractor={item => item.id} />
+        <FlatList data={news} renderItem={renderItem} keyExtractor={item => item.id.toString()} />
       </View>
   );
 }
@@ -71,9 +70,13 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         elevation: 7,
     },
-    image: {
+    imageWrapper: {
         width: '100%',
         height: 250,
+    },
+    image: {
+        width: '100%',
+        height: '100%',
         resizeMode: 'cover',
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,

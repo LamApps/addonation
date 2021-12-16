@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 import Firebase from "../config/firebase";
 
 import { AppStyles } from '../AppStyles';
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
   secondsWorldwide: {
     color: AppStyles.color.textMute,
     fontSize: AppStyles.fontSize.extraLarge,
-    fontFamily: 'normal',
     fontWeight: 'bold',
   },
   logo: {
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 1,
     borderColor: AppStyles.color.border,
-    padding: 8,
+    padding: 10,
     paddingLeft: 15,
     marginBottom: 25,
   },

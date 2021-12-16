@@ -1,63 +1,62 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, Image, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { View, Text, Image, Dimensions, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import CarouselComp, { Pagination } from 'react-native-snap-carousel';
 const SLIDER_WIDTH = Dimensions.get('window').width + 80
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 import { AppStyles } from '../../AppStyles';
 import { FontAwesome } from '@expo/vector-icons'; 
 import moment from 'moment';
+import axios from 'axios';
 
-const appData = [
-    {
-        id: "1",
-        author: "Alice Walker",
-        quote: "2021-11-21T15:21:00Z",
-        description: "Lorem ipsum dolor sit amet is the most popular dummy text in the world! You already know that? Yeah, Good! But never confident you can not do all things in the world with it!",
-        imgUrl: "https://source.unsplash.com/200x300/?nature"
-    },
-    {
-        id: "2",
-        author: "James Coulter",
-        quote: "2021-09-21T15:21:00Z",
-        description: "Lorem ipsum dolor sit amet is the most popular dummy text in the world! You already know that? Yeah, Good! But never confident you can not do all things in the world with it!",
-        imgUrl: "https://source.unsplash.com/200x300/?water"
-    },
-    {
-        id: "3",
-        author: "Neymar John",
-        quote: "2021-04-21T15:21:00Z",
-        description: "Lorem ipsum dolor sit amet is the most popular dummy text in the world! You already know that? Yeah, Good! But never confident you can not do all things in the world with it!",
-        imgUrl: "https://source.unsplash.com/200x300/?island"
-    }
-];
+import Constants from 'expo-constants';
+
+const baseUrl = Constants.manifest.extra.apiBaseUrl
 
 const Carousel = (props) => {
     const isCarousel = useRef(null);
     const [ activeSlide, setActiveSlide ] = useState(0);
     const {navigation} = props
+    const [news, setNews] = useState([]);
+
+    useEffect(() => {
+        axios({
+          method: 'get',
+          url: `${baseUrl}/api/get_public_news`,
+        }).then((response) => {
+          const data = response.data
+          const show_data = data.slice(0,3)
+          setNews(show_data)
+        }).catch(error=>{
+          Alert.alert('Error', error.message, [
+              { text: 'OK' },
+            ]);
+        })
+      }, [])
+    const renderItem =  useCallback(({ item }:any) => {
+        const date = new Date(item.created_at)
+            return (
+            <View style={styles.itemContainer} key={item.id.toString()}>
+                <View style={styles.innerContent}>
+                    <TouchableOpacity onPress={()=>{navigation.navigate('News', { screen: 'NewsDetail', params: {item: item}})}}>
+                        <Image
+                            source={{uri: baseUrl+'/storage/news/'+item.featured_img}}
+                            style={styles.image}
+                        />
+                    </TouchableOpacity>
+                    <Text style={styles.header}>{item.title}</Text>
+                    <Text style={styles.body}>{moment([date.getFullYear(), date.getMonth(), date.getDate()]).fromNow()}</Text>
+                </View>
+            </View>
+        )}, [news]
+    )
     return(
         <View>
             <CarouselComp
                 layout="default"
                 layoutCardOffset={9}
                 ref={isCarousel}
-                data={appData}
-                renderItem={({ item, index }:any) => {
-                    const date = new Date(item.quote)
-                    return (
-                    <View style={styles.itemContainer} key={index}>
-                        <View style={styles.innerContent}>
-                            <TouchableOpacity onPress={()=>{navigation.navigate('News', { screen: 'NewsDetail', params: {item: item}})}}>
-                                <Image
-                                    source={{uri: item.imgUrl}}
-                                    style={styles.image}
-                                />
-                            </TouchableOpacity>
-                            <Text style={styles.header}>{item.author}</Text>
-                            <Text style={styles.body}>{moment([date.getFullYear(), date.getMonth(), date.getDate()]).fromNow()}</Text>
-                        </View>
-                    </View>
-                )}}
+                data={news}
+                renderItem={renderItem}
                 sliderWidth={SLIDER_WIDTH}
                 itemWidth={ITEM_WIDTH}
                 containerCustomStyle={{ flexGrow: 0 }}
@@ -73,7 +72,7 @@ const Carousel = (props) => {
                 </TouchableOpacity>
             </View>
             <Pagination
-                dotsLength={appData.length}
+                dotsLength={news.length}
                 activeDotIndex={activeSlide}
                 dotStyle={{
                     width: 10,

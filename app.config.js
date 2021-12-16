@@ -21,7 +21,7 @@ export default {
     ],
     ios: {
       bundleIdentifier: "com.addonation.donatesixsec",
-      buildNumber: "1.0.0",
+      buildNumber: "1.0.1",
       supportsTablet: true,
       requireFullScreen: true,
       googleServicesFile: "./GoogleService-Info.plist",
@@ -50,7 +50,8 @@ export default {
       messagingSenderId: process.env.MESSAGING_SENDER_ID,
       appId: process.env.APP_ID,
       androidOauthClientId: process.env.ANDROID_OAUTH_CLIENT_ID,
-      iosOauthClientId: process.env.IOS_OAUTH_CLIENT_ID
+      iosOauthClientId: process.env.IOS_OAUTH_CLIENT_ID,
+      apiBaseUrl: process.env.API_BASE_URL
     },
     plugins: [
       [
