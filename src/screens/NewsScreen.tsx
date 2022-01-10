@@ -2,12 +2,11 @@ import React, { useState, useEffect} from 'react';
 import { View, FlatList, StyleSheet, Text, Image, Alert } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';
-import Constants from 'expo-constants';
 
 import { AppStyles } from '../AppStyles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const baseUrl = Constants.manifest.extra.apiBaseUrl
+import {baseUrl} from '../config/firebase';
 
 class Item extends React.PureComponent {
     render() {

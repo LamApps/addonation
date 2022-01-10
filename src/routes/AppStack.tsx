@@ -7,7 +7,6 @@ import { getHeaderTitle } from '@react-navigation/elements';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { AppStyles } from '../AppStyles';
-import Constants from 'expo-constants';
 import axios from 'axios';
 
 import DashboardScreen from '../screens/DashboardScreen';
@@ -16,10 +15,10 @@ import NewsScreen from '../screens/NewsScreen';
 import NewsDetailScreen from '../screens/NewsDetailScreen';
 import GiftScreen from '../screens/GiftScreen';
 import SettingScreen from '../screens/SettingScreen';
+import {baseUrl} from '../config/firebase';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-const baseUrl = Constants.manifest.extra.apiBaseUrl
 
 function News() {
   return (

@@ -2,14 +2,13 @@ import React, { useState, useEffect, useCallback}  from 'react';
 import { StyleSheet, ScrollView, Text, View, TouchableOpacity, Image, Alert } from 'react-native';
 import Firebase from "../config/firebase";
 import {useAuth} from '../contexts/Auth';
-import Constants from 'expo-constants';
 import axios from 'axios';
 import moment from 'moment';
 import Seconds from '../components/Seconds';
 
 import { AppStyles } from '../AppStyles';
 
-const baseUrl = Constants.manifest.extra.apiBaseUrl
+import {baseUrl} from '../config/firebase';
 
 export default function GiftScreen({ navigation }:any) {
   const [totalSeconds, setTotalSeconds] = useState(0)

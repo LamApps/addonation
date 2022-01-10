@@ -1,7 +1,7 @@
 import React from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, SafeAreaView } from 'react-native';
-import {Router} from './src/routes/Router';
-import {AuthProvider} from './src/contexts/Auth';
+import { StyleSheet, SafeAreaView } from 'react-native';
+import { Router } from './src/routes/Router';
+import { AuthProvider } from './src/contexts/Auth';
 import { StatusBar } from 'expo-status-bar';
 
 const App = () => {

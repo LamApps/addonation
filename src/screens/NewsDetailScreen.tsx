@@ -2,11 +2,10 @@ import React from 'react';
 import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
-import Constants from 'expo-constants';
 
 import { AppStyles } from '../AppStyles';
 
-const baseUrl = Constants.manifest.extra.apiBaseUrl
+import {baseUrl} from '../config/firebase';
 
 export default function NewsDetailScreen({route, navigation}) {
   const { item } = route.params;

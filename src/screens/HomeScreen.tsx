@@ -27,8 +27,8 @@ export default function HomeScreen({ navigation }:any) {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
     {
       expoClientId: '675640908306-eastohfr65lgv76bajr0ajk5qg14fola.apps.googleusercontent.com',
-      iosClientId: Constants.manifest.extra.iosOauthClientId,
-      androidClientId: Constants.manifest.extra.androidOauthClientId,
+      iosClientId: '675640908306-f2vspgu29mt6k3rmmt6hjq3endj70idr.apps.googleusercontent.com',
+      androidClientId: '675640908306-3733qp0hu3q3dl1e2u9phtblv81ckkp9.apps.googleusercontent.com',
     },
   );
   useEffect(() => {

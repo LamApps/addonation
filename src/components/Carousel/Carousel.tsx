@@ -8,9 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import moment from 'moment';
 import axios from 'axios';
 
-import Constants from 'expo-constants';
-
-const baseUrl = Constants.manifest.extra.apiBaseUrl
+import {baseUrl} from '../../config/firebase';
 
 const Carousel = (props) => {
     const isCarousel = useRef(null);

@@ -7,13 +7,12 @@ import Firebase from "../config/firebase";
 import firebase from 'firebase'
 import {useAuth} from '../contexts/Auth';
 import Seconds from '../components/Seconds';
-import Constants from 'expo-constants';
 
 import { FontAwesome } from '@expo/vector-icons';
 
 import { AppStyles } from '../AppStyles';
 
-const baseUrl = Constants.manifest.extra.apiBaseUrl
+import {baseUrl} from '../config/firebase';
 
 // const VIDEO_WIDTH = Dimensions.get('window').width
 export default function DonateScreen({ navigation }:any) {
