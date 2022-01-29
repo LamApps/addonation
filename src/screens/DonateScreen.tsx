@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect} from 'react';
 import { StyleSheet, ScrollView, Text, View, Alert, TouchableOpacity } from 'react-native';
 import { Video, AVPlaybackStatus, VideoFullscreenUpdateEvent } from 'expo-av';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import axios from 'axios';
 import Firebase from "../config/firebase";
@@ -20,8 +21,15 @@ export default function DonateScreen({ navigation }:any) {
   const [mySeconds, setMySeconds] = useState(0);
   const [currentUri, setCurrentUri] = useState('')
   const [videos, setVideos] = useState([]);
+  const [dayCount, setDayCount] = useState(0);
   const auth = useAuth();
-
+  const today = new Date();
+  const dayLog = {
+    year: today.getFullYear(),
+    month: today.getMonth(),
+    day: today.getDate(),
+    count: 0
+  };
   //get all videos from api
   useEffect(() => {
     axios({
@@ -57,6 +65,22 @@ export default function DonateScreen({ navigation }:any) {
     })
   }, [])
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const uid = auth.authData.token;
+      const myDayLogRef = Firebase.database().ref('dayLog/'+uid);
+      myDayLogRef.once('value', (snapshot: { val: () => any; }) => {
+        const data = snapshot.val()
+        if(data) {
+          if(data.year === today.getFullYear() && data.month === today.getMonth() && data.day === today.getDate()){
+            setDayCount(data.count)
+          }
+        }
+      })
+    })
+    return unsubscribe
+  }, [])
+
   const video = useRef(null);
   const [status, setStatus] = useState({});
   
@@ -72,18 +96,30 @@ export default function DonateScreen({ navigation }:any) {
   }
 
   const playVideo = () => {
-    if(status.isPlaying){
-      video.current.pauseAsync()
+    if(dayCount >= 3) {
+      Alert.alert('Error', 'You cannot donate more than three times a day.', [
+        { text: 'OK' },
+      ]);
     }else{
-      video.current.presentFullscreenPlayer()
-      if(status.durationMillis == status.positionMillis) video.current.playFromPositionAsync(0)
-      else video.current.playAsync()
+      if(status.isPlaying){
+        video.current.pauseAsync()
+      }else{
+        video.current.presentFullscreenPlayer()
+        if(status.durationMillis == status.positionMillis) video.current.playFromPositionAsync(0)
+        else video.current.playAsync()
+      }
     }
   }
   const shuffleVideo = () => {
-    setCurrentUri(baseUrl+'/storage/video/'+videos[Math.floor(Math.random() * videos.length)].url)
-    video.current.presentFullscreenPlayer()
-    video.current.playFromPositionAsync(0)
+    if(dayCount >= 3) {
+      Alert.alert('Error', 'You cannot donate more than three times a day.', [
+        { text: 'OK' },
+      ]);
+    }else{
+      setCurrentUri(baseUrl+'/storage/video/'+videos[Math.floor(Math.random() * videos.length)].url)
+      video.current.presentFullscreenPlayer()
+      video.current.playFromPositionAsync(0)
+    }
   }
   const _onPlaybackStatusUpdate = playbackStatus => {
     setStatus(()=>playbackStatus)
@@ -122,6 +158,11 @@ export default function DonateScreen({ navigation }:any) {
         }
       })
       setMySeconds(mySeconds + duration)
+
+      setDayCount(dayCount+1)
+      const myDayLogRef = Firebase.database().ref('dayLog/'+uid)
+      myDayLogRef.update({year: today.getFullYear(), month: today.getMonth(), day: today.getDate(), count: dayCount+1})
+
     }
   };
 
